@@ -27,10 +27,6 @@
     <script scriptType="hscript"><![CDATA[]]></script>
   </tool>
 
-  <tool name="tool_1" label="New Tool" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[]]></script>
-  </tool>
-
   <tool name="subnet" label="single_float_to_vector" icon="VOP_subnet">
     <helpURL>operator:Vop/subnet</helpURL>
     <toolMenuContext name="network">
