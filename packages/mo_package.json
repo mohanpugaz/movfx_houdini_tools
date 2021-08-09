@@ -1,0 +1,7 @@
+{
+    "HOUDINI_SPLASH_FILE":
+    {
+        "value" :"../movfx_houdini_cover.jpg",
+        "method": "append"
+    }
+}

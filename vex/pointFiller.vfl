@@ -1,0 +1,158 @@
+//  offset point to match another point
+//
+//  point1      - first point
+//  point2      - second point
+//  blend       - blend value
+vector vectorOffset( vector point1; vector point2; float blend;  ){
+    
+    vector offset = point2-point1;
+    vector outpoint = point1 + offset*blend;
+
+    return outpoint;
+}
+
+//point cloud data structure
+struct pcdata { 
+    int count;
+    vector center;
+    float mindist;
+    float maxdist;
+    int closest;
+    int farthest;
+    float dot;
+    float maxdot;
+} 
+    
+//return pc data
+pcdata pointCloudDot( vector pos; int pcinput; float maxdist; int maxpts;){
+
+    int hnd = pcopen(pcinput, "P", pos, maxdist, maxpts);
+    
+    //get center and gather vectors
+    vector tgCt = set(0,0,0);
+    int tgCnt = pcnumfound(hnd);
+    int clId = 0;				//closest point inside point cloud
+    int frId = max(0,tgCnt-1);	//farthest point inside point cloud
+    vector tgVects[];
+    while(pciterate(hnd)){
+        vector tgP;
+        pcimport(hnd,"P",tgP);
+        
+        tgCt+=tgP;
+    
+        vector tgVec = normalize(tgP-pos);
+        push(tgVects,tgVec);
+    }
+
+    tgCt /= float(tgCnt);
+
+    float minDist = length( pcimportbyidxv(hnd,"P",clId) - pos );
+    float maxDist = length( pcimportbyidxv(hnd,"P",frId) - pos );
+
+    int closest = pcimportbyidxi(hnd,"point.number",clId);
+    int farthest = pcimportbyidxi(hnd,"point.number",frId);
+
+    pcclose(hnd);
+    
+    
+    vector ctV = normalize(tgCt-pos);
+    
+    //get min dot product
+    float minDot = 1;
+    float maxDot = -1;
+    
+    foreach(int i;vector tgV;tgVects){
+        float tgDot = dot(tgV,ctV);
+        minDot = min(tgDot,minDot);
+        maxDot = max(tgDot,maxDot);
+    }
+    
+    pcdata result = { 0, {0,0,0} , 0.0 , 0.0 , 0 ,0 ,0 ,0 };
+    
+    result.count = tgCnt;
+    result.center = tgCt;
+    result.mindist = minDist;
+    result.maxdist = maxDist;
+    result.closest = closest;
+    result.farthest = farthest;
+    result.dot = minDot;
+    result.maxdot = maxDot;
+    
+    
+    return result;
+
+}
+
+//point cloud dot product
+float pointCloudDot( vector pos; int pcinput; float maxdist; int maxpts;){
+	pcdata result = pointCloudDot( pos, pcinput, maxdist, maxpts);
+	return result.dot;
+}
+
+
+//spherical random function (alternative to sample_sphere_uniform )
+vector sphrand(float seed){
+	float PI = 3.1415926536;
+
+    vector ran =  rand(seed);
+
+    float tetha = rand(ran.x)*PI*2;
+    float phi = 2*asin(sqrt(ran.y));
+    float len = ran.z;
+    
+    float xpos = sin(phi)*cos(tetha);
+    float ypos = sin(phi)*sin(tetha);
+    float zpos = cos(phi);
+    
+    vector cartesian = set(xpos,ypos,zpos)*len;
+    
+    return cartesian;
+
+}
+
+//multiple random sphere points
+int[] addrandpoints(int count;vector center;float radius;float seed;){
+	int newPts[] = {};
+	for(int i=0;i<count;i++){
+		vector rand = sphrand((float)i*seed)*radius;
+		addpoint(0,center+rand);
+	}
+
+    return newPts;
+}
+
+int[] addrandpoints(int count;vector center;float radius;){
+
+    float seed = 12345;
+    int newPts[] = addrandpoints(count,center,radius,seed);
+
+    return newPts;
+}
+
+//creae multiple cone points
+int[] multi_sphere_cone(vector direction; float maxangle; float seed; int count; float radius;  vector center;){
+    float ang = maxangle*3.14159;
+    count = (int)(maxangle*(float)count);
+    int newPts[];
+    for(int i=0;i<count;i++){
+        vector rand =  rand(i*seed);
+        vector cartes = sample_sphere_cone(direction,ang,rand)*radius+center;
+        int newPt = addpoint(0,cartes);
+        push(newPts,newPt);
+    }
+
+    return newPts;
+}
+
+
+//multiple random sphere points
+int[] multi_sphere_uniform(int count;vector center;float radius;float seed;){
+    int newPts[] = {};
+    for(int i=0;i<count;i++){
+        vector vseed =  rand(seed*(i+1));
+        vector rand = sample_sphere_uniform(vseed)*radius;
+        addpoint(0,center+rand);
+    }
+
+    return newPts;
+}

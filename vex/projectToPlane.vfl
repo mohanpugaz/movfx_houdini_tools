@@ -1,0 +1,54 @@
+//  project point to plane
+//
+//  point       - point to project
+//  plcenter    - plane center point
+//  plnormal    - plane normal
+vector projectToPlane( vector point; vector plcenter; vector plnormal; ){
+    
+    plnormal = normalize(plnormal);
+    vector projvec = point-plcenter;
+
+    vector projnrm = cross(plnormal,projvec);
+    vector outpoint = cross(projnrm,plnormal) + plcenter;
+
+    return outpoint;
+}
+
+
+//  project point to plane
+//
+//  point                   - point to project
+//  plpt0, plpt1, plpt2     - plane points
+vector projectToPlane( vector point; vector plpt0; vector plpt1; vector plpt2; ){
+    
+    vector vec0 = normalize(plpt1-plpt0);
+    vector vec1 = normalize(plpt2-plpt0);
+    vector nrm = cross(vec1,vec0);
+    
+    vector outpoint = projectToPlane(point,plpt0,nrm);
+
+    return outpoint;
+}
+
+
+//  project point to plane defined by closest point cloud points
+//
+//  point       - point to project
+//  pcinput     - point cloud input
+//  maxdist     - point cloud maximum lookup distance
+vector projectToPcPlane( vector point; int pcinput; float maxdist; ){
+    
+    int pts[] = pcfind(pcinput, "P", point, maxdist, 3);
+    vector pt0,pt1,pt2;
+    vector outpoint = point;
+
+    if(len(pts)>=3){
+        pt0 = point(pcinput, "P", pts[0]);
+        pt1 = point(pcinput, "P", pts[1]);
+        pt2 = point(pcinput, "P", pts[2]);
+        
+        outpoint = projectToPlane(point,pt0,pt1,pt2);
+    }
+
+    return outpoint;
+}

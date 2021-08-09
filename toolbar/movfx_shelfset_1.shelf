@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <shelfSet name="shelf_set_3" label="New Shelf Set">
+    <memberToolshelf name="mo_misc"/>
+  </shelfSet>
+
+  <toolshelf name="mo_misc" label="mo_misc">
+    <memberTool name="tool_1"/>
+    <memberTool name="subnet"/>
+    <memberTool name="extact_ar_lgt"/>
+    <memberTool name="vertical_align"/>
+    <memberTool name="alignX"/>
+    <memberTool name="clamp_ends"/>
+    <memberTool name="cam"/>
+    <memberTool name="arnold_vopnet"/>
+    <memberTool name="geo2"/>
+    <memberTool name="flipsim"/>
+    <memberTool name="subnet0"/>
+  </toolshelf>
+
+  <tool name="cache_versionUP" label="" icon="PLASMA_App">
+    <script scriptType="hscript"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="tool_1" label="New Tool" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="subnet" label="single_float_to_vector" icon="VOP_subnet">
+    <helpURL>operator:Vop/subnet</helpURL>
+    <toolMenuContext name="network">
+      <contextOpType>Vop/subnet</contextOpType>
+    </toolMenuContext>
+    <script scriptType="python"><![CDATA[
+import sys
+import toolutils
+
+outputitem = None
+inputindex = -1
+inputitem = None
+outputindex = -1
+
+num_args = 1
+h_extra_args = ''
+pane = toolutils.activePane(kwargs)
+if not isinstance(pane, hou.NetworkEditor):
+    pane = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
+    if pane is None:
+       hou.ui.displayMessage(
+               'Cannot create node: cannot find any network pane')
+       sys.exit(0)
+else: # We're creating this tool from the TAB menu inside a network editor
+    pane_node = pane.pwd()
+    if kwargs.has_key("outputnodename") and kwargs.has_key("inputindex"):
+        outputitem = pane_node.item(kwargs["outputnodename"])
+        inputindex = kwargs["inputindex"]
+        h_extra_args += 'set arg4 = "' + kwargs["outputnodename"] + '"\n'
+        h_extra_args += 'set arg5 = "' + str(inputindex) + '"\n'
+        num_args = 6
+    if kwargs.has_key("inputnodename") and kwargs.has_key("outputindex"):
+        inputitem = pane_node.item(kwargs["inputnodename"])
+        outputindex = kwargs["outputindex"]
+        h_extra_args += 'set arg6 = "' + kwargs["inputnodename"] + '"\n'
+        h_extra_args += 'set arg9 = "' + str(outputindex) + '"\n'
+        num_args = 9 
+    if kwargs.has_key("autoplace"):
+        autoplace = kwargs["autoplace"]
+    else:
+        autoplace = False
+    # If shift-clicked we want to auto append to the current
+    # node
+    if kwargs.has_key("shiftclick") and kwargs["shiftclick"]:
+        if inputitem is None:
+            inputitem = pane.currentNode()
+            outputindex = 0
+    if kwargs.has_key("nodepositionx") and             kwargs.has_key("nodepositiony"):
+        try:
+            pos = [ float( kwargs["nodepositionx"] ),
+                    float( kwargs["nodepositiony"] )]
+        except:
+            pos = None
+    else:
+        pos = None
+
+    if not autoplace and not pane.listMode():
+        if pos is not None:
+            pass
+        elif outputitem is None:
+            pos = pane.selectPosition(inputitem, outputindex, None, -1)
+        else:
+            pos = pane.selectPosition(inputitem, outputindex,
+                                      outputitem, inputindex)
+
+    if pos is not None:
+        if kwargs.has_key("node_bbox"):
+            size = kwargs["node_bbox"]
+            pos[0] -= size[0] / 2
+            pos[1] -= size[1] / 2
+        else:
+            pos[0] -= 0.573625
+            pos[1] -= 0.220625
+        h_extra_args += 'set arg2 = "' + str(pos[0]) + '"\n'
+        h_extra_args += 'set arg3 = "' + str(pos[1]) + '"\n'
+h_extra_args += 'set argc = "' + str(num_args) + '"\n'
+            
+pane_node = pane.pwd()
+child_type = pane_node.childTypeCategory().nodeTypes()
+
+if not child_type.has_key('subnet'):
+   hou.ui.displayMessage(
+           'Cannot create node: incompatible pane network type')
+   sys.exit(0)
+
+# First clear the node selection
+pane_node.setSelected(False, True)
+
+h_path = pane_node.path()
+h_preamble = 'set arg1 = "' + h_path + '"\n'
+h_cmd = r''' 
+if ($argc < 2 || "$arg2" == "") then
+   set arg2 = 0
+endif
+if ($argc < 3 || "$arg3" == "") then
+   set arg3 = 0
+endif
+# Automatically generated script
+# $arg1 - the path to add this node
+# $arg2 - x position of the tile
+# $arg3 - y position of the tile
+# $arg4 - input node to wire to
+# $arg5 - which input to wire to
+# $arg6 - output node to wire to
+# $arg7 - the type of this node
+# $arg8 - the node is an indirect input
+# $arg9 - index of output from $arg6
+
+\set noalias = 1
+set saved_path = `execute("oppwf")`
+opcf $arg1
+
+# Node $_obj_geo1_pointvop1_single_float_to_vector (Vop/subnet)
+set _obj_geo1_pointvop1_single_float_to_vector = `run("opadd -e -n -v subnet single_float_to_vector")`
+oplocate -x `$arg2 + 0` -y `$arg3 + 0` $_obj_geo1_pointvop1_single_float_to_vector
+opcolor -c 0.28999999165534973 0.56499999761581421 0.88599997758865356 $_obj_geo1_pointvop1_single_float_to_vector
+opset -d off -r off -h off -f off -y off -t off -l off -s off -u off -F off -c on -e on -b off -L off -M off -H on -E off $_obj_geo1_pointvop1_single_float_to_vector
+opexprlanguage -s hscript $_obj_geo1_pointvop1_single_float_to_vector
+opcf $_obj_geo1_pointvop1_single_float_to_vector
+
+# Node $_obj_geo1_pointvop1_single_float_to_vector_floattovec2 (Vop/floattovec)
+set _obj_geo1_pointvop1_single_float_to_vector_floattovec2 = `run("opadd -e -n -v floattovec floattovec2")`
+oplocate -x `$arg2 + 6.1644399999999999` -y `$arg3 + -2.1409100000000003` $_obj_geo1_pointvop1_single_float_to_vector_floattovec2
+opset -d off -r off -h off -f off -y off -t off -l off -s off -u off -F on -c on -e on -b off -L off -M off -H on -E off $_obj_geo1_pointvop1_single_float_to_vector_floattovec2
+opexprlanguage -s hscript $_obj_geo1_pointvop1_single_float_to_vector_floattovec2
+opuserdata -n '___Version___' -v '' $_obj_geo1_pointvop1_single_float_to_vector_floattovec2
+
+# Node $_obj_geo1_pointvop1_single_float_to_vector_null1 (Vop/null)
+set _obj_geo1_pointvop1_single_float_to_vector_null1 = `run("opadd -e -n -v null null1")`
+oplocate -x `$arg2 + 3.50854` -y `$arg3 + -2.21591` $_obj_geo1_pointvop1_single_float_to_vector_null1
+opparm $_obj_geo1_pointvop1_single_float_to_vector_null1  outputnum ( 1 )
+opparm -V 17.5.425 $_obj_geo1_pointvop1_single_float_to_vector_null1 outputnum ( 1 )
+opset -d on -r on -h off -f off -y off -t off -l off -s off -u off -F on -c on -e on -b off -L off -M off -H on -E off $_obj_geo1_pointvop1_single_float_to_vector_null1
+opexprlanguage -s hscript $_obj_geo1_pointvop1_single_float_to_vector_null1
+opuserdata -n '___Version___' -v '17.5.425' $_obj_geo1_pointvop1_single_float_to_vector_null1
+
+# Node $_obj_geo1_pointvop1_single_float_to_vector_suboutput1 (Vop/suboutput)
+set _obj_geo1_pointvop1_single_float_to_vector_suboutput1 = `run("opadd -e -n -v suboutput suboutput1")`
+oplocate -x `$arg2 + 8.8203399999999998` -y `$arg3 + -2.1409100000000003` $_obj_geo1_pointvop1_single_float_to_vector_suboutput1
+opset -d off -r off -h off -f off -y off -t off -l off -s off -u off -F on -c on -e on -b off -L off -M off -H on -E off $_obj_geo1_pointvop1_single_float_to_vector_suboutput1
+opexprlanguage -s hscript $_obj_geo1_pointvop1_single_float_to_vector_suboutput1
+
+# Node $_obj_geo1_pointvop1_single_float_to_vector_subinput1 (Vop/subinput)
+set _obj_geo1_pointvop1_single_float_to_vector_subinput1 = `run("opadd -e -n -v subinput subinput1")`
+oplocate -x `$arg2 + 0.85264000000000095` -y `$arg3 + -2.2909100000000007` $_obj_geo1_pointvop1_single_float_to_vector_subinput1
+opset -d off -r off -h off -f off -y off -t off -l off -s off -u off -F on -c on -e on -b off -L off -M off -H on -E off $_obj_geo1_pointvop1_single_float_to_vector_subinput1
+opexprlanguage -s hscript $_obj_geo1_pointvop1_single_float_to_vector_subinput1
+opcf ..
+opcf $_obj_geo1_pointvop1_single_float_to_vector
+oporder -e floattovec2 null1 suboutput1 subinput1 
+opcf ..
+opset -p on $_obj_geo1_pointvop1_single_float_to_vector
+
+opcf $arg1
+opwire -n $_obj_geo1_pointvop1_fit2 -0 $_obj_geo1_pointvop1_single_float_to_vector
+opcf $_obj_geo1_pointvop1_single_float_to_vector
+opwire -n $_obj_geo1_pointvop1_single_float_to_vector_null1 -0 $_obj_geo1_pointvop1_single_float_to_vector_floattovec2
+opwire -n $_obj_geo1_pointvop1_single_float_to_vector_null1 -1 $_obj_geo1_pointvop1_single_float_to_vector_floattovec2
+opwire -n $_obj_geo1_pointvop1_single_float_to_vector_null1 -2 $_obj_geo1_pointvop1_single_float_to_vector_floattovec2
+opwire -n $_obj_geo1_pointvop1_single_float_to_vector_subinput1 -0 $_obj_geo1_pointvop1_single_float_to_vector_null1
+opwire -n $_obj_geo1_pointvop1_single_float_to_vector_floattovec2 -1 $_obj_geo1_pointvop1_single_float_to_vector_suboutput1
+opcf ..
+
+set oidx = 0
+if ($argc >= 9 && "$arg9" != "") then
+    set oidx = $arg9
+endif
+
+if ($argc >= 5 && "$arg4" != "") then
+    set output = $_obj_geo1_pointvop1_single_float_to_vector
+    opwire -n $output -$arg5 $arg4
+endif
+if ($argc >= 6 && "$arg6" != "") then
+    set input = $_obj_geo1_pointvop1_single_float_to_vector
+    if ($arg8) then
+        opwire -n -i $arg6 -0 $input
+    else
+        opwire -n -o $oidx $arg6 -0 $input
+    endif
+endif
+opcf $saved_path
+'''
+hou.hscript(h_preamble + h_extra_args + h_cmd)
+]]></script>
+  </tool>
+
+  <tool name="extact_ar_lgt" label="extract ar light" icon="hicon:/SVGIcons.index?OBJ_light.svg">
+    <script scriptType="python"><![CDATA[import hou
+
+node = hou.selectedNodes()[0];
+
+int = node.parm('light_intensity').eval()
+exp = node.parm('light_exposure').eval()
+asX = node.parm('areasize1').eval()
+asY = node.parm('areasize2').eval()
+posx = node.position()[0]
+posy = node.position()[1] - 1
+
+pos = [posx,posy]
+print pos
+
+context = node.parent()
+arLight = context.createNode('arnold_light')
+
+
+arLight.setInput(0, node)
+arLight.setPosition(pos)
+arLight.parm('ar_light_type').set(3)
+arLight.parm('ar_intensity').set(int)
+arLight.parm('ar_exposure').set(exp)
+arLight.parm('ar_quad_sizex').set(asX)
+arLight.parm('ar_quad_sizey').set(asY
+)
+
+print arLight
+]]></script>
+  </tool>
+</shelfDocument>
