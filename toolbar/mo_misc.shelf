@@ -6,8 +6,6 @@
  a single file. -->
 
   <toolshelf name="mo_misc" label="mo_misc">
-    <memberTool name="tool_1"/>
-    <memberTool name="subnet"/>
     <memberTool name="extact_ar_lgt"/>
     <memberTool name="geo"/>
     <memberTool name="attribvop"/>
