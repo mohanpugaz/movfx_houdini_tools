@@ -15,5 +15,7 @@
     <memberTool name="octane_setup0"/>
     <memberTool name="uv_rop"/>
     <memberTool name="attribwrangle"/>
+    <memberTool name="tool_3"/>
+    <memberTool name="tool_4"/>
   </toolshelf>
 </shelfDocument>
