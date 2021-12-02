@@ -17,5 +17,6 @@
     <memberTool name="attribwrangle"/>
     <memberTool name="tool_3"/>
     <memberTool name="tool_4"/>
+    <memberTool name="mo delete random"/>
   </toolshelf>
 </shelfDocument>
