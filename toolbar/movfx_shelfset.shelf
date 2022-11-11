@@ -18,6 +18,8 @@
 
   <toolshelf name="movfx" label="movfx">
     <memberTool name="cache_versionUP"/>
+    <memberTool name="trans_to_null"/>
+    <memberTool name="geo"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
