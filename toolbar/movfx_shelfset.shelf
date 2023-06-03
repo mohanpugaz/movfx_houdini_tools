@@ -17,6 +17,8 @@
   </toolshelf>
 
   <toolshelf name="movfx" label="movfx">
+    <memberTool name="save_dev"/>
+    <memberTool name="open_dev"/>
     <memberTool name="cache_versionUP"/>
     <memberTool name="trans_to_null"/>
     <memberTool name="geo"/>
