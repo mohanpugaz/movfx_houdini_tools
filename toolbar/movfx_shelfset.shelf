@@ -6,21 +6,15 @@
  a single file. -->
 
   <shelfSet name="shelf_set_3" label="New Shelf Set">
-    <memberToolshelf name="mo_misc"/>
     <memberToolshelf name="movfx"/>
   </shelfSet>
 
-  <toolshelf name="mo_misc" label="mo_misc">
-    <memberTool name="tool_1"/>
-    <memberTool name="subnet"/>
-    <memberTool name="extact_ar_lgt"/>
-  </toolshelf>
-
   <toolshelf name="movfx" label="movfx">
     <memberTool name="save_dev"/>
-    <memberTool name="open_dev"/>
+    <memberTool name="explore_hip"/>
     <memberTool name="geo"/>
     <memberTool name="extract_ar_light"/>
+    <memberTool name="cycle_bg_scheme"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
@@ -257,16 +251,6 @@ dev_path = "D:/work/dev/houdini/" + name + "/" + name + ".hiplc"
 hou.hipFile.save(dev_path)]]></script>
   </tool>
 
-  <tool name="open_dev" label="Open Dev" icon="hicon:/SVGIcons.index?BUTTONS_folder.svg">
-    <script scriptType="python"><![CDATA[import hou
-import os
-
-hip_file_path = hou.hipFile.path()
-hip_file_path = os.path.dirname(hip_file_path)
-
-os.startfile(hip_file_path)]]></script>
-  </tool>
-
   <tool name="geo" label="RNDR_" icon="OBJ_geo">
     <helpURL>operator:Object/geo</helpURL>
     <toolMenuContext name="network">
@@ -470,6 +454,22 @@ arLight.parm('ar_quad_sizey').set(asY
 )
 
 print arLight
+]]></script>
+  </tool>
+
+  <tool name="explore_hip" label="Explore HIP" icon="hicon:/SVGIcons.index?BUTTONS_folder.svg">
+    <script scriptType="python"><![CDATA[import hou
+import os
+
+hip_file_path = hou.hipFile.path()
+hip_file_path = os.path.dirname(hip_file_path)
+
+os.startfile(hip_file_path)]]></script>
+  </tool>
+
+  <tool name="cycle_bg_scheme" label="Cycle BG" icon="hicon:/SVGIcons.index?VIEW_display_background.svg">
+    <script scriptType="python"><![CDATA[import movfxTools as mt
+mt.cycle_display_bg()
 ]]></script>
   </tool>
 </shelfDocument>

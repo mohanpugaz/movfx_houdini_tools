@@ -1,0 +1,7 @@
+{
+    "package_path" : [
+        "$JOB/tools/houdini",
+        "$SHOT/tools/houdini",
+	"$SEQ/tools/houdini"
+        ]
+}
