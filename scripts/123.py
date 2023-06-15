@@ -5,3 +5,4 @@ end = 1100
 hou.playbar.setFrameRange(start, end)
 hou.playbar.setPlaybackRange(start, end)
 hou.setFrame(1001)
+hou.setUpdateMode(hou.updateMode.Manual)
