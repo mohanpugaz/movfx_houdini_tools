@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Please note, that the files defining the main menu (ie, MainMenuCommon,
+     MainMenuMaster, and MainMenuEscape)
+     can exist in $HOME/houdiniX.Y/ directory and will supplement
+     the original definitions found in $HFS/houdini/ -->
+
+
+<menuDocument>
+
+    <menu>
+		<label>movfx_tools</label>
+		
+        <scriptItem id="opmenu.tmp_show_kwargs_ql">
+            <label>Add To Gallery</label>
+            <scriptCode><![CDATA[
+import movfxTools
+movfxTools.add_to_gallery()
+            ]]></scriptCode>
+			
+        </scriptItem>
+		
+    </menu>
+
+</menuDocument>
+

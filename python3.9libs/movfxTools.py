@@ -82,3 +82,15 @@ def explore_hip():
 def explore_lib():
     path = os.environ["MOLIB"]
     wb.open(path)
+    
+def add_to_gallery():
+    gal_path = os.getenv("MOVFX")
+    gal_path = gal_path+"/gallery/"
+    node = hou.selectedNodes()[0]
+    type = node.type().name()
+    category = "movfx_"
+    name = category + type+"_"+node.name()
+    gal_path = gal_path + name + ".gal" 
+    print(gal_path)
+    hou.galleries.createGalleryEntry(gal_path, name, node)
+    
