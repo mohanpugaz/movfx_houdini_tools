@@ -1,5 +1,6 @@
 import hou,shutil,os
 from time import gmtime, strftime
+import webbrowser as wb
 
 def cycle_display_bg():
     # init available schemes
@@ -69,3 +70,15 @@ def filecache_backupsave():
     viewport_grab(dup_file_path,cache_name)
     
     return         
+
+def explore_movfxtools():
+    path = os.environ["MOVFX"]
+    wb.open(path)
+
+def explore_hip():
+    path = os.environ["HIP"]
+    wb.open(path)
+    
+def explore_lib():
+    path = os.environ["MOLIB"]
+    wb.open(path)
