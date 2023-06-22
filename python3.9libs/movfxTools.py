@@ -1,4 +1,4 @@
-import hou,shutil,os
+import hou,shutil,os,time,re
 from time import gmtime, strftime
 import webbrowser as wb
 
@@ -27,31 +27,65 @@ def cycle_display_bg():
             next_scheme = schemes[next_id]
             display_settings.setColorScheme(next_scheme)
             print(f"set to {next_scheme}")
-
-
-                
+    return
+    
+    
 def viewport_grab(filepath,name):
-
+    """takes filepath and name as argument and saves viewport snapshot"""
+    
+    ###grabbing cur_viewport and other objects
     cur_desktop = hou.ui.curDesktop()
     desktop = cur_desktop.name()
     viewer = hou.paneTabType.SceneViewer
     panetab = cur_desktop.paneTabOfType(viewer).name()
     persp = cur_desktop.paneTabOfType(viewer).curViewport().name()
-    camera_path = desktop + '.' + panetab + '.' + 'world.' + persp
-    hn = hou.getenv('HIPNAME')
+    camera_path = desktop + '.' + panetab + '.' + 'world.' + persp   
     
-    filename = filepath+"/"+name+".png"
-    
+    # saving snapshot to desired path
+    filename = filepath+"/"+name+".jpg"
     if filename is not None:
         frame = hou.frame()
-        hou.hscript("viewwrite -c -f %d %d -r 500 500 %s '%s'" % (frame, frame,
-                    camera_path, filename))
+        hou.hscript("viewwrite -c -f %d %d -r 500 500 %s '%s'" % (frame, frame,camera_path, filename))
+    return
+
+def backup_save(new_file):
+    dup_file = new_file
+    dup_file_path = os.path.dirname(dup_file)
+    cur_file = hou.hipFile.path()
+    if os.path.exists(dup_file_path):
+        shutil.copy(cur_file, dup_file)
+    else:
+        os.mkdir(dup_file_path)
+        shutil.copy(cur_file, dup_file)
+    return     
 
 
+def snap_tool():
+    """ makes snapshot of current viewport and saves a backupfile in snaps folder"""
+    
+    ###get current scene details
+    hip = os.getenv("HIP")
+    hipname = os.getenv("HIPNAME")
 
+    snaps = hip+"/snaps/"
+    cur_time = time.ctime()
+    cur_file = hou.hipFile.path()
+
+    name = hipname + "_" + cur_time 
+    name = name.replace(" ","_")
+    name = name.replace(":","_")
+    
+    dup_file_path = snaps + "_hips/" 
+    dup_file = dup_file_path + name + ".hiplc"
+
+    backup_save(dup_file)
+    viewport_grab(snaps,name)
+    return
+
+    
 def filecache_backupsave():
     hou.hipFile.save()
-    cur_file = hou.hipFile.path()
+
     nodepath = hou.node("../").path()
     node = hou.node(nodepath)
     parm = node.parm("cachename")
@@ -60,16 +94,19 @@ def filecache_backupsave():
    
     dup_file_path = os.getenv("HIP")+"/geo/_backup/"
     dup_file = dup_file_path + cache_name + ".hiplc"
-        
-    if os.path.exists(dup_file_path):
-        shutil.copy(cur_file, dup_file)
-    else:
-        os.mkdir(dup_file_path)
-        shutil.copy(cur_file, dup_file)
-
-    viewport_grab(dup_file_path,cache_name)
     
-    return         
+
+    backup_save(dup_file)
+    viewport_grab(dup_file_path,cache_name)
+    return   
+  
+
+def flipbook_backupsave(path,name):
+    hou.hipFile.save()
+    cur_file = hou.hipFile.path()
+    dup_file = path +"/"+ name + ".hiplc"
+    backup_save(dup_file)
+  
 
 def explore_movfxtools():
     path = os.environ["MOVFX"]
@@ -88,9 +125,85 @@ def add_to_gallery():
     gal_path = gal_path+"/gallery/"
     node = hou.selectedNodes()[0]
     type = node.type().name()
+    type_cat = node.type().category().name()
     category = "movfx_"
-    name = category + type+"_"+node.name()
+    name = category + type_cat + "_" + type+"_"+node.name()
     gal_path = gal_path + name + ".gal" 
     print(gal_path)
-    hou.galleries.createGalleryEntry(gal_path, name, node)
-    
+    entry = hou.galleries.createGalleryEntry(gal_path, name, node)
+    entry.setCategories(["movfx"])
+    label = node.name().replace("_"," ")
+    entry.setLabel(label)
+    entry.setName(node.name())
+    entry.setKeywords(["movfx"])
+    entry.setDescription(hou.ui.readInput("Give a discription")[1])
+    if type == "redshift_vopnet":
+        entry.setKeywords(["Redshift","RS","movfx"])
+
+def make_new_shot(path):
+    name = hou.ui.readInput("name",title="New Shot")[1]
+    root = path
+    path = root + name + "/" 
+    file = path + name + "_001.hiplc"
+
+    hou.hipFile.save(file)
+
+    folders  = ["flipbook","render","geo","comp","backup","ref","misc","snaps"]
+
+    for folder in folders:
+        dir  = path + folder
+        os.mkdir(dir)
+        
+    hip = os.getenv("HIP")
+    os.environ["FLIPBOOK"] = hip + "/flipbook"
+    os.environ["RENDER"] = hip + "/render"
+    os.environ["GEO"] = hip + "/geo"
+    os.environ["SNAPS"] = hip + "/snaps"
+    os.environ["BACKUP"] = hip + "/backup"
+    os.environ["REF"] = hip + "/ref"
+
+
+
+def incrementally_save_file():
+    file_path = hou.hipFile.path()
+    base_dir = os.path.dirname(file_path)
+    base_name = os.path.basename(file_path)
+
+    name, extension = os.path.splitext(base_name)
+
+    version_match = re.search(r"\d+$", name)  # Search for a version number at the end of the name
+    if version_match:
+        version_str = version_match.group()
+        version = int(version_str)
+        name = name[:version_match.start()]  # Remove the existing version number
+    else:
+        version = 0
+
+    version += 1
+    version_str = str(version).zfill(3)  # Convert version to a 3-digit string with leading zeros
+
+    if version == 1:
+        new_name = f"{name}_{version_str}{extension}"
+    else:
+        new_name = f"{name}{version_str}{extension}"
+
+    new_file_path = os.path.join(base_dir, new_name)
+
+    hou.hipFile.save(new_file_path)
+    print(f"File saved as '{new_file_path}'")
+
+def get_max_version(folder_path):
+    files = os.listdir(folder_path)  # Get a list of files in the folder
+    version_numbers = []
+
+    for file_name in files:
+        version_match = re.search(r"v(\d+)", file_name)  # Extract the version number using a regular expression
+        if version_match:
+            version_number = int(version_match.group(1))  # Convert the version number to an integer
+            version_numbers.append(version_number)
+
+    if version_numbers:
+        max_version = max(version_numbers)
+        return max_version
+    else:
+        return None
