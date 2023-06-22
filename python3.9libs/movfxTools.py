@@ -11,13 +11,11 @@ def cycle_display_bg():
     # add them to a list
     schemes = [light,dark,grey]
     
-    
     # find the viewport display settings
     viewport = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
     display_settings = viewport.curViewport().settings()
-    
-    # apply the sceme
-    
+
+    # apply the sceme 
     current_scheme = display_settings.colorScheme()
     
     for s in schemes:
@@ -51,14 +49,16 @@ def viewport_grab(filepath,name):
 def backup_save(new_file):
     dup_file = new_file
     dup_file_path = os.path.dirname(dup_file)
+    print(dup_file_path)
     cur_file = hou.hipFile.path()
     if os.path.exists(dup_file_path):
+        print("exists")
         shutil.copy(cur_file, dup_file)
     else:
-        os.mkdir(dup_file_path)
+        print("not exists")
+        os.makedirs(dup_file_path)
         shutil.copy(cur_file, dup_file)
     return     
-
 
 def snap_tool():
     """ makes snapshot of current viewport and saves a backupfile in snaps folder"""
@@ -88,16 +88,14 @@ def filecache_backupsave():
 
     nodepath = hou.node("../").path()
     node = hou.node(nodepath)
-    parm = node.parm("cachename")
-    cache_name = parm.eval()
-    cache_name = cache_name.replace(".","_")
-   
-    dup_file_path = os.getenv("HIP")+"/geo/_backup/"
-    dup_file = dup_file_path + cache_name + ".hiplc"
-    
 
-    backup_save(dup_file)
-    viewport_grab(dup_file_path,cache_name)
+    cache_name = node.parm("cachename").eval()
+    cache_name = cache_name.replace(".","_")
+    cache_dir = node.parm("cachedir").eval()
+
+    backup_file = cache_dir + "/" + cache_name + ".hiplc"
+    backup_save(backup_file)
+    viewport_grab(cache_dir,cache_name)
     return   
   
 
@@ -150,6 +148,7 @@ def make_new_shot(path):
 
     folders  = ["flipbook","render","geo","comp","backup","ref","misc","snaps"]
 
+
     for folder in folders:
         dir  = path + folder
         os.mkdir(dir)
@@ -161,7 +160,6 @@ def make_new_shot(path):
     os.environ["SNAPS"] = hip + "/snaps"
     os.environ["BACKUP"] = hip + "/backup"
     os.environ["REF"] = hip + "/ref"
-
 
 
 def incrementally_save_file():
@@ -191,6 +189,7 @@ def incrementally_save_file():
 
     hou.hipFile.save(new_file_path)
     print(f"File saved as '{new_file_path}'")
+
 
 def get_max_version(folder_path):
     files = os.listdir(folder_path)  # Get a list of files in the folder
