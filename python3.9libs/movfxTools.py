@@ -206,3 +206,16 @@ def get_max_version(folder_path):
         return max_version
     else:
         return None
+        
+
+def create_rndr_nodes_from_selected():
+    nodes = hou.selectedNodes()
+    for n in nodes:
+        name = n.name()
+        path = n.path()
+        obj_net = hou.node("/obj")
+        geo = obj_net.createNode("geo",name)
+        om = geo.createNode("object_merge")
+        om.parm("objpath1").set(path)
+    return
+    
