@@ -9,18 +9,17 @@
     <memberToolshelf name="movfx"/>
   </shelfSet>
 
-  <toolshelf name="movfx" label="movfx">
-    <memberTool name="new_dev"/>
+  <toolshelf name="movfx" label="Movfx">
+    <memberTool name="set_shot"/>
     <memberTool name="save_increment"/>
     <memberTool name="explore_hip"/>
     <memberTool name="snap"/>
     <memberTool name="cycle_bg_scheme"/>
-    <memberTool name="reload"/>
-    <memberTool name="reload_menus"/>
     <memberTool name="add_to_gallery"/>
-    <memberTool name="extract_ar_light"/>
-    <memberTool name="geo"/>
     <memberTool name="make_rndr_nodes"/>
+    <memberTool name="geo"/>
+    <memberTool name="extract_ar_light"/>
+    <memberTool name="tool_2"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
@@ -508,4 +507,33 @@ object merge pointing to the selected nodes for each node.
 ]]></helpText>
     <script scriptType="python"><![CDATA[__import__("movfxTools").create_rndr_nodes_from_selected()]]></script>
   </tool>
+
+  <tool name="save_increment" label="Save Increment" icon="hicon:/SVGIcons.index?BUTTONS_increase_indent.svg">
+    <script scriptType="python"><![CDATA[__import__("movfxTools").incrementally_save_file()]]></script>
+  </tool>
+
+  <tool name="set_shot" label="Set Shot" icon="$MOVFXICON">
+    <script scriptType="python"><![CDATA[__import__("movfxTools").set_shot()]]></script>
+  </tool>
+
+  <tool name="open_dev" label="Open Dev" icon="$MOVFXICON">
+    <script scriptType="python"><![CDATA[import os,hou
+root = os.getenv("HOUDINIDEV")
+file = hou.ui.selectFile(root)
+hou.hipFile.load(file)]]></script>
+  </tool>
+
+  <tool name="viewport_update" label="Update Viewport" icon="$MOVFXICON">
+    <script scriptType="python"><![CDATA[import hou
+hou.ui.triggerUpdate()
+]]></script>
+  </tool>
+
+  <toolshelf name="movfx_dev" label="Movfx Dev">
+    <memberTool name="new_dev"/>
+    <memberTool name="open_dev"/>
+    <memberTool name="viewport_update"/>
+    <memberTool name="reload"/>
+    <memberTool name="reload_menus"/>
+  </toolshelf>
 </shelfDocument>

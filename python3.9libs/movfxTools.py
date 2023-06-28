@@ -24,7 +24,8 @@ def cycle_display_bg():
             next_id = next_id % len(schemes)
             next_scheme = schemes[next_id]
             display_settings.setColorScheme(next_scheme)
-            print(f"set to {next_scheme}")
+            msg = f"viewport background set to {next_scheme.name()}"
+            hou.ui.setStatusMessage(msg)
     return
     
     
@@ -146,22 +147,28 @@ def make_new_shot(path):
 
     hou.hipFile.save(file)
 
-    folders  = ["flipbook","render","geo","comp","backup","ref","misc","snaps"]
+    folders  = ["flipbook","images","render","temp","geo","comp","backup","ref","misc","snaps"]
 
 
     for folder in folders:
         dir  = path + folder
         os.mkdir(dir)
         
+    set_shot()
+    return
+    
+def set_shot():
     hip = os.getenv("HIP")
     os.environ["FLIPBOOK"] = hip + "/flipbook"
     os.environ["RENDER"] = hip + "/render"
+    os.environ["VIDEO"] = hip + "/video"
+    os.environ["IMAGES"] = hip + "/images"
     os.environ["GEO"] = hip + "/geo"
     os.environ["SNAPS"] = hip + "/snaps"
     os.environ["BACKUP"] = hip + "/backup"
     os.environ["REF"] = hip + "/ref"
-
-
+    os.environ["SHOTTEMP"] = hip + "/temp"
+    
 def incrementally_save_file():
     file_path = hou.hipFile.path()
     base_dir = os.path.dirname(file_path)
@@ -186,9 +193,10 @@ def incrementally_save_file():
         new_name = f"{name}{version_str}{extension}"
 
     new_file_path = os.path.join(base_dir, new_name)
-
-    hou.hipFile.save(new_file_path)
+    new_file_path = new_file_path.replace("\\", "/")
     print(f"File saved as '{new_file_path}'")
+    hou.hipFile.save(new_file_path)
+    
 
 
 def get_max_version(folder_path):
