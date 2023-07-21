@@ -1,0 +1,51 @@
+#
+#  This table contains a list of useful resolutions.
+#
+#  The first argument should contain 3 values.
+#	xres
+#	yres
+#	pixel aspect ratio
+#
+#  These choices are used to build menus in the UI.
+#
+#  This file can be overridden by installing a copy somwhere in the
+#  Houdini path.
+#
+#  This document is under CC-3.0 Attribution-Share Alike 3.0
+#	http://creativecommons.org/licenses/by-sa/3.0/
+#  Attribution:  There is no requirement to attribute the author.
+#
+
+"640 480 1"	"640 x 480"
+"1280 720 1"	"HDTV 720"
+"1920 1080 1"	"HDTV 1080"
+"2560 1440 1"	"My Monitor Res (2K)"
+"3840 2160 1"	"HDTV 2160 (4K)"
+"_separator_"	"---------"
+"640 486 1"	"NTSC"
+"720 486 0.9"	"NTSC D1"
+"768 576 1"	"PAL"
+"720 576 1.067"	"PAL D1"
+"720 576 1.422"	"PAL 16:9 anamorphic"
+"1024 576 1"	"PAL 16:9 (1 to 1)"
+"_separator_"	"---------"
+"4096 3112 1"	"Full Ap 4K"
+"2048 1556 1"	"Full Ap 2K"
+"3656 2664 1"	"Acad 4K"
+"1828 1332 1"	"Acad 2k"
+"3656 3112 1"	"Scope 4k"
+"1828 1556 1"	"Scope 2k"
+"6144 4096 1"	"Vista 4k"
+"3072 2048 1"	"Vista 2k"
+"_separator_"	"---------"
+"256 256 1"	"256^2"
+"512 512 1"	"512^2"
+"1024 1024 1"	"1024^2"
+"2048 2048 1"	"2048^2"
+"4096 4096 1"	"4096^2"
+"8192 8192 1"	"8192^2"
+"_separator_"	"---------"
+"1080 1350 1"	"Insta Portrait"
+"1080 1080 1"	"Insta Square"
+"1080 1090 1"	"Insta Reels"
+

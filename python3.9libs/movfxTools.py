@@ -223,7 +223,60 @@ def create_rndr_nodes_from_selected():
         path = n.path()
         obj_net = hou.node("/obj")
         geo = obj_net.createNode("geo",name)
+        geo.setColor(hou.Color((0.1,0.3,0.6)))
         om = geo.createNode("object_merge")
         om.parm("objpath1").set(path)
     return
     
+    
+def create_objmerge_from_selected():
+    nodes = hou.selectedNodes()
+    for n in nodes:
+        p = n.parent()
+        if p.type().name() == "geo":
+            name = n.name()
+            path = n.path()
+            pos  = n.position()
+            pos  = [pos[0],pos[1]-1]
+            om = p.createNode("object_merge")
+            om.parm("objpath1").set(path)
+            om.setPosition(pos)
+            
+    return
+
+
+######____________Communicate_with_Telegram_BOT____________######
+
+from telegram import Bot
+import requests,json
+
+def get_tele_cred():
+    with open('C:/Users/mohan/Desktop/tele_tok.json', 'r') as user_file:
+        json_data = json.load(user_file)
+    TOKEN   = json_data['TOKEN']
+    chat_id = json_data['chat_id']
+    return [TOKEN,chat_id]
+
+
+def tele_send(msg,video="filepath"):
+    bot_token = get_tele_cred()[0]
+    chat_id = get_tele_cred()[1]
+
+    msg_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    vid_url = f"https://api.telegram.org/bot{bot_token}/sendVideo"
+
+    # Send text message
+    if msg:
+        requests.post(msg_url, json={"chat_id": chat_id, "text": msg})
+
+    # Send video file
+    if video_file:
+        with open(video_file, 'rb') as file:
+            files = {'video': file}
+            requests.post(vid_url, data={"chat_id": chat_id}, files=files)
+
+
+#######__________###########
+
+
+
