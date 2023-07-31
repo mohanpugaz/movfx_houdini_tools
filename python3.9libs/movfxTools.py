@@ -279,4 +279,8 @@ def tele_send(msg,video="filepath"):
 #######__________###########
 
 
-
+def nodeNearPos(node):
+    n = node
+    pos  = n.position()
+    pos  = [pos[0],pos[1]-1]
+    return pos

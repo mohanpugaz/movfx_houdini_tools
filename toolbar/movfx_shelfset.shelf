@@ -21,6 +21,7 @@
     <memberTool name="make_rndr_nodes"/>
     <memberTool name="telegram_message"/>
     <memberTool name="object_merge"/>
+    <memberTool name="mk_mtx_from_mesh"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
@@ -540,5 +541,28 @@ hou.ui.triggerUpdate()
 
   <tool name="object_merge" label="Object Merge" icon="$MOVFXICON">
     <script scriptType="python"><![CDATA[__import__("movfxTools").create_objmerge_from_selected()]]></script>
+  </tool>
+
+  <tool name="mk_mtx_from_mesh" label="Make MTX from Mesh" icon="$MOVFXICON">
+    <script scriptType="python"><![CDATA[import hou
+import movfxTools as mt
+
+node = hou.selectedNodes()[0]
+geo = node.geometry()
+shop_path = geo.findPrimAttrib("shop_materialpath")
+mat_net = node.parent().createNode("matnet",f"{node.name()}_mats")
+mat_net.setPosition(mt.nodeNearPos(node))
+
+
+if shop_path :
+    for path in shop_path.strings() : 
+        mat_name = path.split("/")[-1]
+        print(mat_name)
+        mat = mat_net.createNode("mtlxstandard_surface",mat_name)
+else :
+    print("No shop paths exist.")
+    
+
+]]></script>
   </tool>
 </shelfDocument>
