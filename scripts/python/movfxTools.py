@@ -142,7 +142,11 @@ def add_to_gallery():
 def make_new_shot(path):
     name = hou.ui.readInput("name",title="New Shot")[1]
     root = path
-    path = root + name + "/" 
+    path = root + name 
+    os.mkdir(path)
+    path = path + "/work/hip"
+    os.mkdir(path)
+    path = path + "/"
     file = path + name + "_001.hiplc"
 
     hou.hipFile.save(file)
@@ -151,7 +155,28 @@ def make_new_shot(path):
 
 
     for folder in folders:
-        dir  = path + folder
+        dir  = path + "/" + folder
+        os.mkdir(dir)
+        
+    set_shot()
+    return
+    
+def make_workspace(path):
+    name = os.path.basename(path)
+    hip_path = path + "/work/hip" 
+    
+    if os.path.exists(hip_path):
+        print("hip path exists, creating folders") 
+    else:
+        os.mkdir(hip_path)
+
+    hip_path = hip_path + "/"
+    file = hip_path + name + "_001.hiplc"
+    hou.hipFile.save(file)
+    folders  = ["flipbook","images","render","temp","geo","comp","backup","ref","misc","snaps"]
+
+    for folder in folders:
+        dir  = hip_path + "/" + folder
         os.mkdir(dir)
         
     set_shot()

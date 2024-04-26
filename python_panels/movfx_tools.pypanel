@@ -7,76 +7,26 @@
  in a single file. -->
   <interface name="movfx_tools" label="Movfx Tools" icon="$MOVFXICON" showNetworkNavigationBar="false" help_url="">
     <script><![CDATA[########################################################################
-# Replace the sample code below with your own to create a
-# PyQt5 or PySide2 interface.  Your code must define an
-# onCreateInterface() function that returns the root widget of
-# your interface.
-#
-# The 'hutil.Qt' is for internal-use only.
-# It is a wrapper module that enables the sample code below to work with
-# either a Qt4 or Qt5 environment for backwards-compatibility.
-#
-# When developing your own Python Panel, import directly from PySide2
-# or PyQt5 instead of from 'hutil.Qt'.
-########################################################################
+import hou
 
-
-###____  just testing it  ____####
-
-
-from PySide2 import QtWidgets
-
-
-class MyWidget(QtWidgets.QWidget):
+class SelectedNodePanel(hou.PythonPanel):
     def __init__(self):
-        super(MyWidget, self).__init__()
-        self.init_ui()
+        hou.PythonPanel.__init__(self, "Selected Node Info")
+        
+        # Add UI elements
+        self.node_label = self.addLabel("Selected Node:")
+        self.node_name = self.addLabel("No node selected")
+        
+    def onNodeSelectionChanged(self):
+        selected_nodes = hou.selectedNodes()
+        if selected_nodes:
+            self.node_name.setText(selected_nodes[0].name())
+        else:
+            self.node_name.setText("No node selected")
 
-    def init_ui(self):
-        main_layout = QtWidgets.QVBoxLayout()
-
-        button_layout = QtWidgets.QHBoxLayout()
-        button1 = QtWidgets.QPushButton("Button 1")
-        button2 = QtWidgets.QPushButton("Button 2")
-        button_layout.addWidget(button1)
-        button_layout.addWidget(button2)
-
-        separator1 = QtWidgets.QFrame()
-        separator1.setFrameShape(QtWidgets.QFrame.HLine)
-        separator1.setFrameShadow(QtWidgets.QFrame.Sunken)
-
-        button3 = QtWidgets.QPushButton("Button 3")
-        button4 = QtWidgets.QPushButton("Button 4")
-
-        separator2 = QtWidgets.QFrame()
-        separator2.setFrameShape(QtWidgets.QFrame.HLine)
-        separator2.setFrameShadow(QtWidgets.QFrame.Sunken)
-
-        button_layout2 = QtWidgets.QHBoxLayout()
-        button5 = QtWidgets.QPushButton("Button 5")
-        button6 = QtWidgets.QPushButton("Button 6")
-        button_layout2.addWidget(button5)
-        button_layout2.addWidget(button6)
-
-        main_layout.addLayout(button_layout)
-        main_layout.addWidget(separator1)
-        main_layout.addWidget(button3)
-        main_layout.addWidget(button4)
-        main_layout.addWidget(separator2)
-        main_layout.addLayout(button_layout2)
-
-        self.setLayout(main_layout)
-
-
-def onCreateInterface():
-    widget = MyWidget()
-    return widget
-
-
-
-
-
-]]></script>
+# Create the panel instance
+selected_node_panel = SelectedNodePanel()
+selected_node_panel.show()]]></script>
     <includeInPaneTabMenu menu_position="0" create_separator="false"/>
     <includeInToolbarMenu menu_position="106" create_separator="false"/>
     <help><![CDATA[]]></help>
