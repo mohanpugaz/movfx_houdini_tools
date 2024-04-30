@@ -498,7 +498,8 @@ importlib.reload(mo_toolbox)
   <tool name="new_dev" label="New Dev" icon="hicon:/SVGIcons.index?ENGINE_save_to_hip.svg">
     <toolSubmenu>movfx/hipfile/save_dev</toolSubmenu>
     <script scriptType="python"><![CDATA[import movfxTools
-dev_root = "D:/work/dev/houdini/"
+import os
+dev_root = os.getenv("HOUDINIDEV")
 movfxTools.make_new_shot(dev_root)
 ]]></script>
   </tool>
@@ -520,9 +521,12 @@ object merge pointing to the selected nodes for each node.
 
   <tool name="open_dev" label="Open Dev" icon="$MOVFXICON">
     <script scriptType="python"><![CDATA[import os,hou
+import webbrowser as wb
+
 root = os.getenv("HOUDINIDEV")
-file = hou.ui.selectFile(root)
-hou.hipFile.load(file)]]></script>
+wb.open(root)
+#file = hou.ui.selectFile(root)
+#hou.hipFile.load(file)]]></script>
   </tool>
 
   <tool name="viewport_update" label="Update Viewport" icon="$MOVFXICON">
@@ -533,11 +537,11 @@ hou.ui.triggerUpdate()
 
   <toolshelf name="movfx_dev" label="movfx dev">
     <memberTool name="new_dev"/>
+    <memberTool name="tool_2"/>
     <memberTool name="open_dev"/>
     <memberTool name="viewport_update"/>
     <memberTool name="reload"/>
     <memberTool name="reload_menus"/>
-    <memberTool name="tool_2"/>
     <memberTool name="open_my_tools"/>
   </toolshelf>
 
@@ -591,5 +595,27 @@ import webbrowser as wb
 
 path = os.getenv("movfx")
 wb.open(path)]]></script>
+  </tool>
+
+  <tool name="tool_2" label="New VFX Reel" icon="hicon:/SVGIcons.index?BUTTONS_auto_save.svg">
+    <script scriptType="python"><![CDATA["""import movfxTools 
+import hou,os
+proj_root = "D:/youtube_channels/pixel_pisasu/vfx_shorts"
+projects = os.listdir(proj_root)
+proj_name = hou.ui.selectFromList(projects)
+proj_name = projects[proj_name[0]]
+hip_path = proj_root+"/"+proj_name+"/"
+print(hip_path)
+movfxTools.make_new_shot(hip_path)"""
+
+import movfxTools as mt
+pp_reels = "D:/jobs/pp_reels"
+
+seq_name = hou.ui.readInput("Give New Seq Name, ex: bifrost_001",title="New Seq")[1]
+shot_name = hou.ui.readInput("Give shot Name, ex:sh010",title="New Shot")[1]
+path = pp_reels + "/" + seq_name + "/" + shot_name
+mt.make_workspace(path)
+
+]]></script>
   </tool>
 </shelfDocument>
