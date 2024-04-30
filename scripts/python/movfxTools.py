@@ -208,7 +208,6 @@ def incrementally_save_file():
     hou.hipFile.save(new_file_path)
     
 
-
 def get_max_version(folder_path):
     files = os.listdir(folder_path)  # Get a list of files in the folder
     version_numbers = []

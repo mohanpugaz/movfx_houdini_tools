@@ -500,6 +500,7 @@ importlib.reload(mo_toolbox)
     <script scriptType="python"><![CDATA[import movfxTools
 import os
 dev_root = os.getenv("HOUDINIDEV")
+print(dev_root)
 movfxTools.make_new_shot(dev_root)
 ]]></script>
   </tool>
