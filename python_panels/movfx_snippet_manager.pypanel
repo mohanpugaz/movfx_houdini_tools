@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>
+  <!-- This file contains definitions of Python interfaces and the
+ interfaces menu.  It should not be hand-edited when it is being
+ used by the application.  Note, that two definitions of the
+ same interface or of the interfaces menu are not allowed
+ in a single file. -->
+  <interface name="movfx_snippet_manager" label="Movfx Snippet Manager" icon="hicon:/SVGIcons.index?LOP_stagemanager.svg" showNetworkNavigationBar="true" help_url="">
+    <script><![CDATA[import mo_toolbox
+import importlib 
+importlib.reload(mo_toolbox)
+
+def onCreateInterface():
+    return mo_toolbox.M_Toolbox()]]></script>
+    <includeInToolbarMenu menu_position="107" create_separator="false"/>
+    <help><![CDATA[]]></help>
+  </interface>
+</pythonPanelDocument>

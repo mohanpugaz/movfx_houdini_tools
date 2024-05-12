@@ -122,6 +122,7 @@ def explore_lib():
 def add_to_gallery():
     gal_path = os.getenv("MOVFX")
     gal_path = gal_path+"/gallery/"
+    thumb_path = gal_path + "/.thumbs"
     node = hou.selectedNodes()[0]
     type = node.type().name()
     type_cat = node.type().category().name()
@@ -138,6 +139,7 @@ def add_to_gallery():
     entry.setDescription(hou.ui.readInput("Give a discription")[1])
     if type == "redshift_vopnet":
         entry.setKeywords(["Redshift","RS","movfx"])
+    make_icon(name, thumb_path)
 
 def make_new_shot(path):
     name = hou.ui.readInput("name",title="New Shot")[1]
@@ -293,3 +295,19 @@ def nodeNearPos(node):
     pos  = n.position()
     pos  = [pos[0],pos[1]-1]
     return pos
+
+def make_icon(name,path):
+    # needs icon_maker hda to run this
+
+    root = hou.node("/obj")
+
+    path = path + "/" + name + ".png"
+    words = name.split('_')
+    acronym = ''.join(word[0] for word in words).upper()
+
+    icon_maker = root.createNode("icon_maker")
+    icon_maker.parm("name").set(acronym)
+    icon_maker.parm("out").set(path)
+    icon_maker.parm("execute").pressButton()
+    icon_maker.destroy()
+    return

@@ -2,3 +2,7 @@
 otls/backup/
 backup/
 venv/
+/gallery/.thumbs
+/scripts/python/__pycache__
+/scripts/python/__pycache__
+/scripts/python/__pycache__
