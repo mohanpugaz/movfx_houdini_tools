@@ -5,14 +5,4 @@
  used by the application.  Note, that two definitions of the
  same interface or of the interfaces menu are not allowed
  in a single file. -->
-  <interface name="interface1" label="New Python Interface" icon="MISC_python" showNetworkNavigationBar="true" help_url="">
-    <script><![CDATA[import mo_toolbox
-#import importlib 
-#importlib.reload(mo_toolbox)
-
-def onCreateInterface():
-    return mo_toolbox.M_Toolbox()]]></script>
-    <includeInToolbarMenu menu_position="107" create_separator="false"/>
-    <help><![CDATA[]]></help>
-  </interface>
 </pythonPanelDocument>

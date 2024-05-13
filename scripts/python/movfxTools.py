@@ -61,29 +61,43 @@ def backup_save(new_file):
         shutil.copy(cur_file, dup_file)
     return     
 
-def snap_tool():
-    """ makes snapshot of current viewport and saves a backupfile in snaps folder"""
-    
-    ###get current scene details
-    hip = os.getenv("HIP")
-    hipname = os.getenv("HIPNAME")
 
-    snaps = hip+"/snaps/"
+def snap_save(path):
+    """ makes snapshot of current viewport and saves a backup in given path"""
+
+    snaps = path
     cur_time = time.ctime()
     cur_file = hou.hipFile.path()
+    hip_name = os.getenv("HIPNAME")
 
-    name = hipname + "_" + cur_time 
-    name = name.replace(" ","_")
-    name = name.replace(":","_")
-    
-    dup_file_path = snaps + "_hips/" 
+    name = hip_name + "_" + cur_time
+    name = name.replace(" ", "_")
+    name = name.replace(":", "_")
+
+    dup_file_path = snaps + "/_hips/"
     dup_file = dup_file_path + name + ".hiplc"
 
     backup_save(dup_file)
-    viewport_grab(snaps,name)
+    viewport_grab(snaps, name)
+
     return
 
-    
+def snap_save_shot():
+    ### get current scene details
+    hip = os.getenv("HIP")
+    snaps = hip+"/snaps"
+    snap_save(snaps)
+    return
+
+
+def snap_save_dev():
+    dev = os.getenv("HOUDINIDEV")
+    snaps = dev + "/_snaps"
+    snap_save(snaps)
+    return
+
+
+
 def filecache_backupsave():
     hou.hipFile.save()
 
@@ -139,7 +153,10 @@ def add_to_gallery():
     entry.setDescription(hou.ui.readInput("Give a discription")[1])
     if type == "redshift_vopnet":
         entry.setKeywords(["Redshift","RS","movfx"])
-    make_icon(name, thumb_path)
+    just_name = name[6:]
+    words = just_name.split('_')
+    acronym = ''.join(word[0] for word in words).upper()
+    make_icon(name, thumb_path, acronym)
 
 def make_new_shot(path):
     name = hou.ui.readInput("name",title="New Shot")[1]
@@ -296,14 +313,12 @@ def nodeNearPos(node):
     pos  = [pos[0],pos[1]-1]
     return pos
 
-def make_icon(name,path):
+def make_icon(name,path,acronym):
     # needs icon_maker hda to run this
 
     root = hou.node("/obj")
 
     path = path + "/" + name + ".png"
-    words = name.split('_')
-    acronym = ''.join(word[0] for word in words).upper()
 
     icon_maker = root.createNode("icon_maker")
     icon_maker.parm("name").set(acronym)

@@ -8,10 +8,11 @@
   <shelfSet name="shelf_set_3" label="New Shelf Set"/>
 
   <toolshelf name="movfx" label="Movfx">
+    <memberTool name="new_dev"/>
+    <memberTool name="tool_2"/>
     <memberTool name="set_shot"/>
     <memberTool name="save_increment"/>
     <memberTool name="explore_hip"/>
-    <memberTool name="snap"/>
     <memberTool name="cycle_bg_scheme"/>
     <memberTool name="geo"/>
     <memberTool name="extract_ar_light"/>
@@ -21,6 +22,8 @@
     <memberTool name="object_merge"/>
     <memberTool name="mk_mtx_from_mesh"/>
     <memberTool name="b2h_cam"/>
+    <memberTool name="snap_save_to_shot"/>
+    <memberTool name="snap_save_to_dev"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
@@ -457,12 +460,7 @@ print arLight
 
   <tool name="explore_hip" label="Explore HIP" icon="hicon:/SVGIcons.index?BUTTONS_folder.svg">
     <script scriptType="python"><![CDATA[import hou
-import os
-
-hip_file_path = hou.hipFile.path()
-hip_file_path = os.path.dirname(hip_file_path)
-
-os.startfile(hip_file_path)]]></script>
+hou.ui.showInFileBrowser(hou.hipFile.path())]]></script>
   </tool>
 
   <tool name="cycle_bg_scheme" label="Cycle BG" icon="hicon:/SVGIcons.index?VIEW_display_background.svg">
@@ -487,16 +485,11 @@ importlib.reload(mo_toolbox)
     <script scriptType="python"><![CDATA[__import__("movfxTools").add_to_gallery()    ]]></script>
   </tool>
 
-  <tool name="snap" label="Snap" icon="hicon:/SVGIcons.index?IMAGE_snapshots.svg">
-    <script scriptType="python"><![CDATA[__import__("movfxTools").snap_tool()
-
-
-
-]]></script>
-  </tool>
-
   <tool name="new_dev" label="New Dev" icon="hicon:/SVGIcons.index?ENGINE_save_to_hip.svg">
-    <toolSubmenu>movfx/hipfile/save_dev</toolSubmenu>
+    <toolMenuContext name="network">
+      <contextNetType>OBJ</contextNetType>
+    </toolMenuContext>
+    <toolSubmenu>movfx/scripts/new_dev</toolSubmenu>
     <script scriptType="python"><![CDATA[import movfxTools
 import os
 dev_root = os.getenv("HOUDINIDEV")
@@ -521,6 +514,10 @@ object merge pointing to the selected nodes for each node.
   </tool>
 
   <tool name="open_dev" label="Open Dev" icon="$MOVFXICON">
+    <toolMenuContext name="network">
+      <contextNetType>OBJ</contextNetType>
+    </toolMenuContext>
+    <toolSubmenu>movfx/scripts/open_dev</toolSubmenu>
     <script scriptType="python"><![CDATA[import os,hou
 import webbrowser as wb
 
@@ -537,8 +534,6 @@ hou.ui.triggerUpdate()
   </tool>
 
   <toolshelf name="movfx_dev" label="movfx dev">
-    <memberTool name="new_dev"/>
-    <memberTool name="tool_2"/>
     <memberTool name="open_dev"/>
     <memberTool name="viewport_update"/>
     <memberTool name="reload"/>
@@ -599,6 +594,10 @@ wb.open(path)]]></script>
   </tool>
 
   <tool name="tool_2" label="New VFX Reel" icon="hicon:/SVGIcons.index?BUTTONS_auto_save.svg">
+    <toolMenuContext name="network">
+      <contextNetType>OBJ</contextNetType>
+    </toolMenuContext>
+    <toolSubmenu>movfx/scripts/New Reel</toolSubmenu>
     <script scriptType="python"><![CDATA["""import movfxTools 
 import hou,os
 proj_root = "D:/youtube_channels/pixel_pisasu/vfx_shorts"
@@ -616,6 +615,28 @@ seq_name = hou.ui.readInput("Give New Seq Name, ex: bifrost_001",title="New Seq"
 shot_name = hou.ui.readInput("Give shot Name, ex:sh010",title="New Shot")[1]
 path = pp_reels + "/" + seq_name + "/" + shot_name
 mt.make_workspace(path)
+
+]]></script>
+  </tool>
+
+  <tool name="snap_save_to_shot" label="Snap Save to Shot" icon="hicon:/SVGIcons.index?IMAGE_snapshots.svg">
+    <toolMenuContext name="network">
+      <contextNetType>OBJ</contextNetType>
+      <contextNetType>SOP</contextNetType>
+      <contextNetType>CHOP</contextNetType>
+      <contextNetType>ROP</contextNetType>
+      <contextNetType>SHOP</contextNetType>
+      <contextNetType>COP2</contextNetType>
+      <contextNetType>VOP</contextNetType>
+      <contextNetType>VOPNET</contextNetType>
+      <contextNetType>DOP</contextNetType>
+      <contextNetType>TOP</contextNetType>
+      <contextNetType>LOP</contextNetType>
+    </toolMenuContext>
+    <toolSubmenu>movfx/scripts/snap_save_shot</toolSubmenu>
+    <script scriptType="python"><![CDATA[__import__("movfxTools").snap_save_shot()
+
+
 
 ]]></script>
   </tool>

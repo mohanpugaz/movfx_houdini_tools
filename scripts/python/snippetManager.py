@@ -6,11 +6,12 @@ import hou
 lib = "D:/work/library/tools/houdini/movfx_tools/gallery"
 ui = "D:/work/library/tools/houdini/movfx_tools/python_panels/snippetManager.ui"
 main_widget = None
-
+gals = []
 
 def widget():
 	global ui
 	global main_widget
+	global gals
 
 	ui_file = QtCore.QFile(ui)
 	ui_file.open(QtCore.QFile.ReadOnly)
@@ -21,7 +22,7 @@ def widget():
 	# connect ui parameters to functions
 	main_widget.parm_btn_load.clicked.connect(load_sel)
 	main_widget.parm_inp_search.textChanged.connect(update_table)
-
+	gals = collect_gals()
 	fill_table(gals)
 	return main_widget
 
@@ -60,9 +61,14 @@ def fill_table(gals):
 	# auto resize
 	header = table.horizontalHeader()
 	header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+	# header.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+	# header.setVisible(False)
 	header = table.verticalHeader()
 	header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+	# header.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+	# header.setVisible(False)
 	return
+
 
 def update_table():
 	updated_gals = update_gals()
@@ -78,7 +84,7 @@ def load_sel():
 		path = lib + "/" + n
 		load_gallery_entry(path)
 
-	return print(names)
+	return
 
 
 def load_gallery_entry(gal_file):
@@ -121,9 +127,7 @@ def collect_gals():
 
 
 def update_gals():
-	gals = collect_gals()
-	table = main_widget.parm_tbl_snippets
+	#gals = collect_gals()
 	search = main_widget.parm_inp_search.text()
-	filtered_gals = [file for file in gals if search in file]
-	print(filtered_gals)
+	filtered_gals = [file for file in gals if search.lower() in file.lower()]
 	return filtered_gals

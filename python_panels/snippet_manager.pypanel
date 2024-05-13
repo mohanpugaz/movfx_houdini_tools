@@ -14,6 +14,7 @@ def onCreateInterface():
     return sm.widget()
 ]]></script>
     <includeInToolbarMenu menu_position="202" create_separator="false"/>
+    <showInParametersPane optype="Object/null"/>
     <help><![CDATA[]]></help>
   </interface>
 </pythonPanelDocument>
