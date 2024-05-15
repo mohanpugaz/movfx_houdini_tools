@@ -275,15 +275,12 @@ def create_objmerge_from_selected():
 
 ######____________Communicate_with_Telegram_BOT____________######
 
-from telegram import Bot
 import requests,json
 
 def get_tele_cred():
-    with open('C:/Users/mohan/Desktop/tele_tok.json', 'r') as user_file:
-        json_data = json.load(user_file)
-    TOKEN   = json_data['TOKEN']
-    chat_id = json_data['chat_id']
-    return [TOKEN,chat_id]
+    token = os.getenv("TELEGRAM_TOKEN_HOUNOTIFY")
+    chat_id = os.getenv("TELEGRAM_CHATID_HOUNOTIFY")
+    return [token,chat_id]
 
 
 def tele_send(msg,video="filepath"):
