@@ -24,6 +24,7 @@
     <memberTool name="b2h_cam"/>
     <memberTool name="snap_save_to_shot"/>
     <memberTool name="snap_save_to_dev"/>
+    <memberTool name="tool_3"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
@@ -583,6 +584,8 @@ for p in parms:
 
   <toolshelf name="movfx_jobs" label="movfx jobs">
     <memberTool name="b2h_cam"/>
+    <memberTool name="tool_3"/>
+    <memberTool name="temp"/>
   </toolshelf>
 
   <tool name="open_my_tools" label="Explore Movfx Tools" icon="hicon:/SVGIcons.index?TOOLS_brush.svg">
