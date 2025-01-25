@@ -25,6 +25,9 @@
     <memberTool name="snap_save_to_shot"/>
     <memberTool name="snap_save_to_dev"/>
     <memberTool name="tool_3"/>
+    <memberTool name="save_as_code_file"/>
+    <memberTool name="read_code"/>
+    <memberTool name="multi_read"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
