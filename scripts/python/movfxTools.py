@@ -2,6 +2,18 @@ import hou,shutil,os,time,re
 from time import gmtime, strftime
 import webbrowser as wb
 
+def make_new_shot(path):
+
+    movfx = os.getenv("MOVFX")
+    shot_template = f"{movfx}/shot_template"
+    source_dir = shot_template
+    new_shot_path = f"{path}"
+
+    destination_dir = new_shot_path
+    shutil.copytree(source_dir, destination_dir)
+
+    return new_shot_path
+
 def cycle_display_bg():
     # init available schemes
     light = hou.viewportColorScheme.Light
@@ -158,7 +170,7 @@ def add_to_gallery():
     acronym = ''.join(word[0] for word in words).upper()
     make_icon(name, thumb_path, acronym)
 
-def make_new_shot(path):
+def make_new_shot_shelf(path):
     name = hou.ui.readInput("name",title="New Shot")[1]
     path = path + "/" + name 
     make_workspace(path)
@@ -175,7 +187,7 @@ def make_workspace(path):
         os.makedirs(hip_path)
 
     hip_path = hip_path + "/"
-    file = hip_path + name + "_001.hiplc"
+    file = hip_path + name + "_001.hip"
     hou.hipFile.save(file)
     folders  = ["flipbook","images","render","temp","geo","comp","backup","ref","misc","snaps"]
 

@@ -323,7 +323,7 @@ importlib.reload(mo_toolbox)
 import os
 dev_root = os.getenv("HOUDINIDEV")
 print(dev_root)
-movfxTools.make_new_shot(dev_root)
+movfxTools.make_new_shot_shelf(dev_root)
 ]]></script>
   </tool>
 
