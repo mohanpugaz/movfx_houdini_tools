@@ -368,6 +368,7 @@ hou.ui.triggerUpdate()
     <memberTool name="reload"/>
     <memberTool name="reload_menus"/>
     <memberTool name="open_my_tools"/>
+    <memberTool name="openai"/>
   </toolshelf>
 
   <tool name="object_merge" label="Object Merge" icon="$MOVFXICON">
