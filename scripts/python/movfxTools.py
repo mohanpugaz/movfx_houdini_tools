@@ -335,3 +335,6 @@ def make_icon(name,path,acronym):
     icon_maker.parm("execute").pressButton()
     icon_maker.destroy()
     return
+    
+def open_acg():
+    wb.open("https://ambientcg.com/list?type=material%2Catlas%2Cdecal&sort=popular")
