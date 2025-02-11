@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <tool name="copy_decor" label="Copy Decor To Dependents" icon="hicon:/SVGIcons.index?COP2_channelcopy.svg">
+    <script scriptType="python"><![CDATA[import hou
+def set_dependent_decor(node):
+    dependents = node.dependents()
+    shape = node.userData("nodeshape")
+    color = node.color()
+    name = "om_"+node.name()
+    
+    for dependent in dependents:
+        if dependent.type().name() == "object_merge":
+            dependent.setUserData("nodeshape",shape)
+            dependent.setColor(color)
+            dependent.setName(name,1)
+    return
+
+sel = hou.selectedNodes()[0]
+set_dependent_decor(sel)
+       ]]></script>
+  </tool>
+</shelfDocument>
