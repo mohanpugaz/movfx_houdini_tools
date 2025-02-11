@@ -24,9 +24,4 @@ sel = hou.selectedNodes()[0]
 set_dependent_decor(sel)
        ]]></script>
   </tool>
-
-  <tool name="tool_4" label="New Tool" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hou
-print("test")]]></script>
-  </tool>
 </shelfDocument>

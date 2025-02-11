@@ -28,7 +28,6 @@
     <memberTool name="telegram_message"/>
     <memberTool name="snap_save_to_dev"/>
     <memberTool name="tool_3"/>
-    <memberTool name="tool_4"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
