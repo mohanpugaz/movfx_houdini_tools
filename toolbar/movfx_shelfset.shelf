@@ -362,8 +362,6 @@ hou.ui.triggerUpdate()
     <memberTool name="reload"/>
     <memberTool name="reload_menus"/>
     <memberTool name="open_my_tools"/>
-    <memberTool name="openai"/>
-    <memberTool name="pull_movfx"/>
     <memberTool name="push_movfx"/>
   </toolshelf>
 
@@ -463,6 +461,50 @@ mt.make_workspace(path)
 
 
 
+]]></script>
+  </tool>
+
+  <tool name="save_as_code_file" label="save as code" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+out = hou.selectedNodes()[0]    #select first selected node
+strCode = out.asCode(True,True)#get code, skip defaults, recursively
+codefile ="C:/Users/mohan/Desktop/temp.txt" 
+
+with open(codefile , "w") as file:  # Open the file in write mode
+    file.write(strCode)
+    file.close()
+]]></script>
+  </tool>
+
+  <tool name="read_code" label="read_code" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[codefile ="C:/Users/mohan/Desktop/temp.txt" 
+with open(codefile, "r") as file:  # Open the file in read mode
+    content = file.read()
+    file.close()
+
+exec(content)                   #run saved code
+
+
+]]></script>
+  </tool>
+
+  <tool name="multi_read" label="multi read" icon="Textport">
+    <script scriptType="python"><![CDATA[import os
+import hou
+
+path = "C:/Users/mohan/Desktop/nodes"
+files = os.listdir(path)
+for f in files:
+    codefile = path + "/" + f 
+    with open(codefile, "r") as file:  # Open the file in read mode
+        content = file.read()
+        exec(content)     
+        file.close()]]></script>
+  </tool>
+
+  <tool name="tool_3" label="snapshot" icon="hicon:/SVGIcons.index?IMAGE_snapshots_old.svg">
+    <script scriptType="python"><![CDATA[__import__("movfxTools").snap_save_dev()
 ]]></script>
   </tool>
 </shelfDocument>
