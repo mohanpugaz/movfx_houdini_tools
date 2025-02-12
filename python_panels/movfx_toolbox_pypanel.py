@@ -54,7 +54,6 @@ def refresh_ui():
     except:
         pass
     #print("hoyyy")
-     
 
 def onNodePathChanged(node):
 
@@ -62,7 +61,6 @@ def onNodePathChanged(node):
     path = pane.pwd()
     refresh_ui()
 
-    
 def selection_is_similar():
     nodes = hou.selectedNodes()
     nodeclasses = []

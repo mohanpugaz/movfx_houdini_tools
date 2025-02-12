@@ -7,19 +7,30 @@
 
   <tool name="copy_decor" label="Copy Decor To Dependents" icon="hicon:/SVGIcons.index?COP2_channelcopy.svg">
     <script scriptType="python"><![CDATA[import hou
-def set_dependent_decor(node):
-    dependents = node.dependents()
-    shape = node.userData("nodeshape")
-    color = node.color()
-    name = "om_"+node.name()
-    
-    for dependent in dependents:
-        if dependent.type().name() == "object_merge":
-            dependent.setUserData("nodeshape",shape)
-            dependent.setColor(color)
-            dependent.setName(name,1)
-    return
 
+import hou
+
+def copy_node_properties(source_node, target_node):
+    if not source_node or not target_node:
+        raise ValueError("Source and target nodes must be valid.")
+
+    # Copy shape (only if it's set)
+    shape = source_node.userData("nodeshape")
+    if shape:
+        target_node.setUserData("nodeshape", shape)
+
+    # Copy color
+    target_node.setColor(source_node.color())
+
+    # Copy name (ensure uniqueness)
+    target_node.setName("om_"+source_node.name(), unique_name=True)
+    
+def set_dependent_decor(node): 
+    for dependent in node.dependents():
+        if dependent.type().name() == "object_merge":
+            copy_node_properties(node,dependent)
+    return
+    
 sel = hou.selectedNodes()[0]
 set_dependent_decor(sel)
        ]]></script>

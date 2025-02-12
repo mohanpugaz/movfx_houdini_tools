@@ -298,11 +298,11 @@ mt.cycle_display_bg()
   </tool>
 
   <tool name="reload" label="Reload Py Tools" icon="hicon:/SVGIcons.index?MISC_python_official.svg">
-    <script scriptType="python"><![CDATA[import movfxTools,mo_toolbox
+    <script scriptType="python"><![CDATA[import movfxTools,mo_toolbox,htip
 import importlib 
 importlib.reload(movfxTools)
 importlib.reload(mo_toolbox)
-]]></script>
+importlib.reload(htip)]]></script>
   </tool>
 
   <tool name="reload_menus" label="Reload Menus" icon="PLASMA_App">
