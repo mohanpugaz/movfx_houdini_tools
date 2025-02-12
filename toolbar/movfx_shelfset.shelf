@@ -362,7 +362,6 @@ hou.ui.triggerUpdate()
     <memberTool name="reload"/>
     <memberTool name="reload_menus"/>
     <memberTool name="open_my_tools"/>
-    <memberTool name="push_movfx"/>
   </toolshelf>
 
   <tool name="object_merge" label="Object Merge" icon="$MOVFXICON">
@@ -464,7 +463,7 @@ mt.make_workspace(path)
 ]]></script>
   </tool>
 
-  <tool name="save_as_code_file" label="save as code" icon="PLASMA_App">
+  <tool name="save_as_code_file" label="save as code" icon="hicon:/SVGIcons.index?MISC_python.svg">
     <script scriptType="python"><![CDATA[import hou
 
 out = hou.selectedNodes()[0]    #select first selected node
@@ -477,8 +476,8 @@ with open(codefile , "w") as file:  # Open the file in write mode
 ]]></script>
   </tool>
 
-  <tool name="read_code" label="read_code" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[codefile ="C:/Users/mohan/Desktop/temp.txt" 
+  <tool name="read_code" label="read_code" icon="hicon:/SVGIcons.index?MISC_python.svg">
+    <script scriptType="python"><![CDATA[codefile ="/path/to/nodesavedascode/code.txt" 
 with open(codefile, "r") as file:  # Open the file in read mode
     content = file.read()
     file.close()
@@ -489,7 +488,7 @@ exec(content)                   #run saved code
 ]]></script>
   </tool>
 
-  <tool name="multi_read" label="multi read" icon="Textport">
+  <tool name="multi_read" label="multi read" icon="hicon:/SVGIcons.index?MISC_python.svg">
     <script scriptType="python"><![CDATA[import os
 import hou
 
