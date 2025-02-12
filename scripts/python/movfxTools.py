@@ -285,6 +285,82 @@ def create_objmerge_from_selected():
     return
 
 
+def prototypes_from_name(node):
+
+    # makes a subnet at object level contaning an obj for each `named pieces` in given node. 
+    # which can be used to instance later
+
+    root = "/obj/"
+    geo = node.geometry()
+    named_pieces = geo.primStringAttribValues("name")
+    unique_named_pieces = list(set(named_pieces))  # Get unique names
+    
+    ins_node_name = "INSTANCES"
+    ins_node = hou.node(root).createNode("subnet", ins_node_name, force_valid_node_name=True)
+    
+    for name in unique_named_pieces:
+        piece = ins_node.createNode("geo", name, force_valid_node_name=True)
+        exp = f"@name=={name}"
+        om = piece.createNode("object_merge",name)
+        om.parm("objpath1").set(node.path())
+        om.parm("group1").set(exp)
+
+    return 
+
+
+def prototypes_from_selection():
+
+    # wrapper of prototypes_from_name
+
+    node = hou.selectedNodes()[0]
+    prototypes_from_name(node)
+    return 
+
+
+def nodeNearPos(node):
+    n = node
+    pos  = n.position()
+    pos  = [pos[0],pos[1]-1]
+    return pos
+
+def copy_node(node,name="new_name"):
+    
+    # copy a node and returns copied new node
+    
+    root = node.parent()
+    pos = node.position()
+    pos[0] += 2
+    
+    new_node = hou.copyNodesTo([node],root)[0]
+    if name!="new_name":
+       new_node.setName(name,unique_name=True)
+    new_node.setPosition(pos)
+    return new_node
+
+    
+def write_env_variables_to_file(file_path):
+    try:
+        # Clear the file if it exists
+        if os.path.exists(file_path):
+            with open(file_path, "w") as file:
+                file.truncate(0)
+                
+        # Write environment variables to the file
+        with open(file_path, "a") as file:
+            for var_name, var_value in os.environ.items():
+                if var_value:
+                    file.write(f"{var_name}={var_value}\n\n")
+        
+        # Open the file with the default text editor
+        if platform.system() == "Windows":
+            os.startfile(file_path)
+        elif platform.system() in ["Linux", "Darwin"]:
+            subprocess.Popen(["xdg-open", file_path])
+        else:
+            print("Unsupported platform")
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
 ######____________Communicate_with_Telegram_BOT____________######
 
 import requests,json

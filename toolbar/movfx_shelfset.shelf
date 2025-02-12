@@ -21,7 +21,6 @@
     <memberTool name="b2h_cam"/>
     <memberTool name="snap_save_to_shot"/>
     <memberTool name="copy_decor"/>
-    <memberTool name="tool_3"/>
     <memberTool name="save_as_code_file"/>
     <memberTool name="read_code"/>
     <memberTool name="multi_read"/>
@@ -319,7 +318,6 @@ importlib.reload(mo_toolbox)
     <toolMenuContext name="network">
       <contextNetType>OBJ</contextNetType>
     </toolMenuContext>
-    <toolSubmenu>movfx/scripts/new_dev</toolSubmenu>
     <script scriptType="python"><![CDATA[import movfxTools
 import os
 dev_root = os.getenv("HOUDINIDEV")
@@ -365,8 +363,8 @@ hou.ui.triggerUpdate()
     <memberTool name="reload"/>
     <memberTool name="reload_menus"/>
     <memberTool name="open_my_tools"/>
-    <memberTool name="openai"/>
     <memberTool name="push_movfx"/>
+    <memberTool name="openai"/>
   </toolshelf>
 
   <tool name="object_merge" label="Object Merge" icon="$MOVFXICON">
@@ -411,7 +409,6 @@ for p in parms:
 
   <toolshelf name="movfx_jobs" label="movfx jobs">
     <memberTool name="b2h_cam"/>
-    <memberTool name="tool_3"/>
     <memberTool name="temp"/>
   </toolshelf>
 
@@ -427,7 +424,6 @@ wb.open(path)]]></script>
     <toolMenuContext name="network">
       <contextNetType>OBJ</contextNetType>
     </toolMenuContext>
-    <toolSubmenu>movfx/scripts/New Reel</toolSubmenu>
     <script scriptType="python"><![CDATA["""import movfxTools 
 import hou,os
 proj_root = "D:/youtube_channels/pixel_pisasu/vfx_shorts"
@@ -463,7 +459,6 @@ mt.make_workspace(path)
       <contextNetType>TOP</contextNetType>
       <contextNetType>LOP</contextNetType>
     </toolMenuContext>
-    <toolSubmenu>movfx/scripts/snap_save_shot</toolSubmenu>
     <script scriptType="python"><![CDATA[__import__("movfxTools").snap_save_shot()
 
 
