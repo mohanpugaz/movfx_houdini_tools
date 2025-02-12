@@ -305,7 +305,7 @@ importlib.reload(mo_toolbox)
 importlib.reload(htip)]]></script>
   </tool>
 
-  <tool name="reload_menus" label="Reload Menus" icon="PLASMA_App">
+  <tool name="reload_menus" label="Reload Menus" icon="hicon:/SVGIcons.index?BUTTONS_page_reload.svg">
     <script scriptType="hscript"><![CDATA[menurefresh]]></script>
   </tool>
 
@@ -466,18 +466,19 @@ mt.make_workspace(path)
   <tool name="save_as_code_file" label="save as code" icon="hicon:/SVGIcons.index?MISC_python.svg">
     <script scriptType="python"><![CDATA[import hou
 
-out = hou.selectedNodes()[0]    #select first selected node
-strCode = out.asCode(True,True)#get code, skip defaults, recursively
-codefile ="C:/Users/mohan/Desktop/temp.txt" 
-
-with open(codefile , "w") as file:  # Open the file in write mode
-    file.write(strCode)
-    file.close()
+for node in hou.selectedNodes():
+    name = node.name()
+    strCode = node.asCode(True,True)#get code, skip defaults, recursively
+    codefile =f"/users/mohan/tmp/nodes/{name}.txt" 
+    
+    with open(codefile , "w") as file:  # Open the file in write mode
+        file.write(strCode)
+        file.close()
 ]]></script>
   </tool>
 
   <tool name="read_code" label="read_code" icon="hicon:/SVGIcons.index?MISC_python.svg">
-    <script scriptType="python"><![CDATA[codefile ="/path/to/nodesavedascode/code.txt" 
+    <script scriptType="python"><![CDATA[codefile ="/users/mohan/tmp/temp.txt" 
 with open(codefile, "r") as file:  # Open the file in read mode
     content = file.read()
     file.close()
@@ -492,7 +493,7 @@ exec(content)                   #run saved code
     <script scriptType="python"><![CDATA[import os
 import hou
 
-path = "C:/Users/mohan/Desktop/nodes"
+path = "/users/mohan/tmp/nodes"
 files = os.listdir(path)
 for f in files:
     codefile = path + "/" + f 
