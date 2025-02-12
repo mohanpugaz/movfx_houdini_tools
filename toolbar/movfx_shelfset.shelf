@@ -26,7 +26,6 @@
     <memberTool name="multi_read"/>
     <memberTool name="telegram_message"/>
     <memberTool name="snap_save_to_dev"/>
-    <memberTool name="tool_3"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
@@ -363,8 +362,9 @@ hou.ui.triggerUpdate()
     <memberTool name="reload"/>
     <memberTool name="reload_menus"/>
     <memberTool name="open_my_tools"/>
-    <memberTool name="push_movfx"/>
     <memberTool name="openai"/>
+    <memberTool name="pull_movfx"/>
+    <memberTool name="push_movfx"/>
   </toolshelf>
 
   <tool name="object_merge" label="Object Merge" icon="$MOVFXICON">
