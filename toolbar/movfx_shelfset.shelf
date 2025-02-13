@@ -298,11 +298,12 @@ mt.cycle_display_bg()
   </tool>
 
   <tool name="reload" label="Reload Py Tools" icon="hicon:/SVGIcons.index?MISC_python_official.svg">
-    <script scriptType="python"><![CDATA[import movfxTools,mo_toolbox,htip
+    <script scriptType="python"><![CDATA[import movfxTools,mo_toolbox,htip,toolsbynodes
 import importlib 
 importlib.reload(movfxTools)
 importlib.reload(mo_toolbox)
-importlib.reload(htip)]]></script>
+importlib.reload(htip)
+importlib.reload(toolsbynodes)]]></script>
   </tool>
 
   <tool name="reload_menus" label="Reload Menus" icon="hicon:/SVGIcons.index?BUTTONS_page_reload.svg">
@@ -507,4 +508,10 @@ for f in files:
     <script scriptType="python"><![CDATA[__import__("movfxTools").snap_save_dev()
 ]]></script>
   </tool>
+
+  <shelfSet name="movfx_shelf_set" label="Movfx Shelf Set">
+    <memberToolshelf name="movfx"/>
+    <memberToolshelf name="movfx_dev"/>
+    <memberToolshelf name="movfx_jobs"/>
+  </shelfSet>
 </shelfDocument>

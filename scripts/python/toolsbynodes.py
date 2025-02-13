@@ -33,8 +33,16 @@ class SimplePythonPanel(QtWidgets.QWidget):
 
     def update_node_name(self):
         selected_nodes = hou.selectedNodes()
-        node_name = selected_nodes[0].type() if selected_nodes else "None"
-        self.node_label.setText(f"Selected Node Type: {node_name}")
+
+        if not selected_nodes:
+            self.node_label.setText("Node Type: None\nNode Name: None")
+            return
+
+        if len(selected_nodes) > 1:
+            self.node_label.setText("Node Type: Multiple Selected\nNode Name: Multiple Selected")
+        else:
+            node = selected_nodes[0]
+            self.node_label.setText(f"Node Type: {node.type().name()}\nNode Name: {node.name()}")
 
     def on_btn_createNew_click(self):
         hou.ui.displayMessage("Create New Clicked")  # Replace with custom function
