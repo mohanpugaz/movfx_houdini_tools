@@ -5,7 +5,11 @@
  Note, that two definitions of the same element are not allowed in
  a single file. -->
 
-  <shelfSet name="shelf_set_3" label="New Shelf Set"/>
+  <shelfSet name="shelf_set_3" label="New Shelf Set">
+    <memberToolshelf name="movfx"/>
+    <memberToolshelf name="movfx_dev"/>
+    <memberToolshelf name="movfx_jobs"/>
+  </shelfSet>
 
   <toolshelf name="movfx" label="Movfx">
     <memberTool name="new_dev"/>
@@ -510,8 +514,6 @@ for f in files:
   </tool>
 
   <shelfSet name="movfx_shelf_set" label="Movfx Shelf Set">
-    <memberToolshelf name="movfx"/>
     <memberToolshelf name="movfx_dev"/>
-    <memberToolshelf name="movfx_jobs"/>
   </shelfSet>
 </shelfDocument>
