@@ -9,6 +9,8 @@
     <memberToolshelf name="movfx"/>
     <memberToolshelf name="movfx_dev"/>
     <memberToolshelf name="movfx_jobs"/>
+    <memberToolshelf name="movfx_utd"/>
+    <memberToolshelf name="liquid_dynamics"/>
   </shelfSet>
 
   <toolshelf name="movfx" label="Movfx">
@@ -302,12 +304,13 @@ mt.cycle_display_bg()
   </tool>
 
   <tool name="reload" label="Reload Py Tools" icon="hicon:/SVGIcons.index?MISC_python_official.svg">
-    <script scriptType="python"><![CDATA[import movfxTools,mo_toolbox,htip,toolsbynodes
+    <script scriptType="python"><![CDATA[import movfxTools,mo_toolbox,htip,toolsbynodes,movfxUTD
 import importlib 
 importlib.reload(movfxTools)
 importlib.reload(mo_toolbox)
 importlib.reload(htip)
-importlib.reload(toolsbynodes)]]></script>
+importlib.reload(toolsbynodes)
+importlib.reload(movfxUTD)]]></script>
   </tool>
 
   <tool name="reload_menus" label="Reload Menus" icon="hicon:/SVGIcons.index?BUTTONS_page_reload.svg">
