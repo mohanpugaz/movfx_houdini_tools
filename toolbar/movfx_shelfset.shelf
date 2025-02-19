@@ -9,7 +9,6 @@
     <memberToolshelf name="movfx"/>
     <memberToolshelf name="movfx_dev"/>
     <memberToolshelf name="movfx_jobs"/>
-    <memberToolshelf name="movfx_utd"/>
     <memberToolshelf name="liquid_dynamics"/>
   </shelfSet>
 
@@ -518,6 +517,5 @@ for f in files:
 
   <shelfSet name="movfx_shelf_set" label="Movfx Shelf Set">
     <memberToolshelf name="movfx_dev"/>
-    <memberToolshelf name="mohan_git"/>
   </shelfSet>
 </shelfDocument>
