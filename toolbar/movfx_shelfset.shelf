@@ -9,9 +9,6 @@
     <memberToolshelf name="movfx"/>
     <memberToolshelf name="movfx_dev"/>
     <memberToolshelf name="movfx_jobs"/>
-    <memberToolshelf name="liquid_dynamics"/>
-    <memberToolshelf name="particles"/>
-    <memberToolshelf name="grains"/>
   </shelfSet>
 
   <toolshelf name="movfx" label="Movfx">
@@ -518,8 +515,9 @@ for f in files:
   </tool>
 
   <shelfSet name="movfx_shelf_set" label="Movfx Shelf Set">
-    <memberToolshelf name="movfx_dev"/>
     <memberToolshelf name="movfx_utd"/>
     <memberToolshelf name="mohan_git"/>
+    <memberToolshelf name="movfx"/>
+    <memberToolshelf name="movfx_dev"/>
   </shelfSet>
 </shelfDocument>
