@@ -17,7 +17,8 @@
     <memberTool name="save_increment"/>
     <memberTool name="explore_hip"/>
     <memberTool name="cycle_bg_scheme"/>
-    <memberTool name="extract_ar_light"/>
+    <memberTool name="mantra_to_arnold_lights"/>
+    <memberTool name="node_color_from_light_color"/>
     <memberTool name="add_to_gallery"/>
     <memberTool name="make_rndr_nodes"/>
     <memberTool name="object_merge"/>
@@ -271,7 +272,7 @@ posx = node.position()[0]
 posy = node.position()[1] - 1
 
 pos = [posx,posy]
-print pos
+print(pos)
 
 context = node.parent()
 arLight = context.createNode('arnold_light')
@@ -286,7 +287,7 @@ arLight.parm('ar_quad_sizex').set(asX)
 arLight.parm('ar_quad_sizey').set(asY
 )
 
-print arLight
+print(arLight)
 ]]></script>
   </tool>
 
@@ -520,4 +521,82 @@ for f in files:
     <memberToolshelf name="movfx"/>
     <memberToolshelf name="movfx_dev"/>
   </shelfSet>
+
+  <tool name="mantra_to_arnold_lights" label="Mantra To Arnold Lights" icon="hicon:/SVGIcons.index?DATATYPES_lpe_tag_light.svg">
+    <script scriptType="python"><![CDATA[import hou
+
+def convert_selected_mantra_to_arnold():
+
+    light_type_map = {
+        "point": "point",
+        "spot": "spot",
+        "distant": "distant",
+        "grid": "quad",
+        "disk": "disk"
+    }
+    
+    selected_nodes = [node for node in hou.selectedNodes()]
+    
+    converted_count = 0
+    
+    for mantra_light in selected_nodes:
+        arnold_light = hou.node("/obj").createNode("arnold_light", mantra_light.name() + "_arnold")
+        
+        # position and rotation
+        arnold_light.setWorldTransform(mantra_light.worldTransform())
+        
+        # Get Arnold light type based on Mantra light type
+        light_type = light_type_map.get(mantra_light.parm("light_type").evalAsString(), "point")
+        arnold_light.parm("ar_light_type").set(light_type)
+        
+        # intensity
+        if mantra_light.parm("light_intensity"):
+            arnold_light.parm("ar_intensity").set(mantra_light.parm("light_intensity").eval())
+        
+        # color
+        if mantra_light.parmTuple("light_color"):
+            arnold_light.parmTuple("ar_color").set(mantra_light.parmTuple("light_color").eval())
+        
+        # exposure if available
+        if mantra_light.parm("light_exposure"):
+            arnold_light.parm("ar_exposure").set(mantra_light.parm("light_exposure").eval())
+        
+        # size for quad light
+        if light_type == "quad" and mantra_light.parmTuple("areasize"):
+            arnold_light.parmTuple("ar_quad_size").set(mantra_light.parmTuple("areasize").eval())
+        
+        # size for disk lights (use the smaller of X and Y as radius)
+        if light_type == "disk" and mantra_light.parmTuple("areasize"):
+            size_x, size_y = mantra_light.parmTuple("areasize").eval()
+            min_radius = min(size_x, size_y)/2
+            arnold_light.parm("ar_disk_radius").set(min_radius)
+        
+        converted_count += 1
+    
+    print(f"Converted {converted_count} selected Mantra lights to Arnold lights.")
+
+convert_selected_mantra_to_arnold()
+]]></script>
+  </tool>
+
+  <tool name="node_color_from_light_color" label="Node color From Light Color" icon="hicon:/SVGIcons.index?LOP_lightfilterlibrary.svg">
+    <script scriptType="python"><![CDATA[import hou
+
+# Get the selected nodes
+nodes = hou.selectedNodes()
+if not nodes:
+    hou.ui.displayMessage("No nodes selected!")
+else:
+    for node in nodes:
+        # Determine the correct light color parameter
+        light_parm = node.parmTuple("light_color") or node.parmTuple("ar_light_color")
+        
+        if light_parm:
+            # Get light color parameter
+            light_color = light_parm.eval()
+
+            # Apply the color to the node
+            node.setColor(hou.Color(light_color))
+]]></script>
+  </tool>
 </shelfDocument>
