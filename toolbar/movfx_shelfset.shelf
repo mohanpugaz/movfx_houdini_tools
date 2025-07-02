@@ -9,6 +9,7 @@
     <memberToolshelf name="movfx"/>
     <memberToolshelf name="movfx_dev"/>
     <memberToolshelf name="movfx_jobs"/>
+    <memberToolshelf name="movfx_utd"/>
   </shelfSet>
 
   <toolshelf name="movfx" label="Movfx">
@@ -520,6 +521,7 @@ for f in files:
     <memberToolshelf name="mohan_git"/>
     <memberToolshelf name="movfx"/>
     <memberToolshelf name="movfx_dev"/>
+    <memberToolshelf name="untold_lighting"/>
   </shelfSet>
 
   <tool name="mantra_to_arnold_lights" label="Mantra To Arnold Lights" icon="hicon:/SVGIcons.index?DATATYPES_lpe_tag_light.svg">
