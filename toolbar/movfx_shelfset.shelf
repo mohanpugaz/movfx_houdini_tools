@@ -304,13 +304,14 @@ mt.cycle_display_bg()
   </tool>
 
   <tool name="reload" label="Reload Py Tools" icon="hicon:/SVGIcons.index?MISC_python_official.svg">
-    <script scriptType="python"><![CDATA[import movfxTools,mo_toolbox,htip,toolsbynodes,movfxUTD
+    <script scriptType="python"><![CDATA[import movfxTools,mo_toolbox,toolsbynodes
+#movfxUTD,htip
 import importlib 
 importlib.reload(movfxTools)
-importlib.reload(mo_toolbox)
-importlib.reload(htip)
+#importlib.reload(mo_toolbox)
+#importlib.reload(htip)
 importlib.reload(toolsbynodes)
-importlib.reload(movfxUTD)]]></script>
+#importlib.reload(movfxUTD)]]></script>
   </tool>
 
   <tool name="reload_menus" label="Reload Menus" icon="hicon:/SVGIcons.index?BUTTONS_page_reload.svg">

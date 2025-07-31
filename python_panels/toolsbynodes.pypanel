@@ -11,6 +11,7 @@
 def createInterface():
     return toolsbynodes.createInterface()
 ]]></script>
+    <includeInPaneTabMenu menu_position="0" create_separator="false"/>
     <includeInToolbarMenu menu_position="204" create_separator="false"/>
     <help><![CDATA[]]></help>
   </interface>

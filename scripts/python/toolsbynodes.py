@@ -4,7 +4,7 @@ import os
 import importlib.util
 import webbrowser as wb
 import subprocess as sp
-
+import shutil
 
 class SimpleToolsUI(QtWidgets.QWidget):
     def __init__(self, parent=None):
@@ -15,15 +15,23 @@ class SimpleToolsUI(QtWidgets.QWidget):
         # Main layout
         layout = QtWidgets.QVBoxLayout(self)
 
+        #Tool Info
+        self.tool_label = QtWidgets.QLabel("Tools By Nodes - By MOVFX")
+        self.tool_label.setStyleSheet("""
+            background-color: #9b59b6;
+            color: white;
+            padding: 10px;
+            border-radius: 15px;
+        """)
+        self.tool_label.setAlignment(QtCore.Qt.AlignCenter)
+
+
+        layout.addWidget(self.tool_label)
+        
         # Node info label
         self.node_label = QtWidgets.QLabel("Select a node to see tools")
         layout.addWidget(self.node_label)
-
-        # General Tools
-        self.btn_open_folder = QtWidgets.QPushButton("Open")
-        layout.addWidget(self.btn_open_folder)
-        self.btn_open_folder.clicked.connect(self.open_folder)
-
+ 
         # Scrollable area for tools
         scroll_area = QtWidgets.QScrollArea()
         scroll_area.setWidgetResizable(True)
@@ -32,13 +40,30 @@ class SimpleToolsUI(QtWidgets.QWidget):
         # Widget to contain the tools
         tools_widget = QtWidgets.QWidget()
         scroll_area.setWidget(tools_widget)
+        
+        # General Tools
+        self.btn_open_folder = QtWidgets.QPushButton("Open Tools Dir")
+        self.btn_create_folder = QtWidgets.QPushButton("Create Tool Folder For Current Node")
+        
+        
+        self.btn_open_folder.setStyleSheet("QPushButton { background-color: rgba(0,0,0,0.1); }")
+        self.btn_create_folder.setStyleSheet("QPushButton { background-color: rgba(0,0,0,0.1); }")
+        
+        layout.addWidget(self.btn_open_folder)
+        layout.addWidget(self.btn_create_folder)
+        
+        self.btn_open_folder.clicked.connect(self.open_folder)
+        self.btn_create_folder.clicked.connect(self.create_folder_for_current_node)
+       
+
+
 
         # Tools layout (aligned to top)
         self.tools_layout = QtWidgets.QVBoxLayout(tools_widget)
         self.tools_layout.setAlignment(QtCore.Qt.AlignTop)
 
         # Your tools folder path
-        self.tools_folder = "/users/mohan/movfx/movfx_houdini_tools/scripts/python/toolsByNodes_lib"
+        self.tools_folder = os.getenv("MOVFX") + "/scripts/python/toolsByNodes_lib"
 
         # Track current selection to avoid unnecessary updates
         self.current_node_type = None
@@ -51,11 +76,12 @@ class SimpleToolsUI(QtWidgets.QWidget):
 
     def on_selection_changed(self):
         # Get selected nodes
+        
         selected = hou.selectedNodes()
 
         if len(selected) == 1:
             node = selected[0]
-            node_type = node.type().name()
+            node_type = node.type().nameWithCategory()
 
             # Only update if node type changed
             if node_type != self.current_node_type:
@@ -69,16 +95,44 @@ class SimpleToolsUI(QtWidgets.QWidget):
                 self.node_label.setText("Select a single node")
                 self.clear_tools()
 
-
-    def open_folder(self,  node_type):
-        tool_path = self.tools_folder + "/" + hou.selectedNodes()[0].type().name()
+    def open_folder(self):
+        tool_path = self.tools_folder
         print(tool_path)
-        #wb.open(tool_path)
-        sp.Popen(tool_path)
+        wb.open(tool_path)
+        #sp.Popen(tool_path)
+        
+    def create_folder_for_current_node(self):
+        selected = hou.selectedNodes()
+        if len(selected) == 1:
+            node = selected[0]
+            node_type = node.type().nameWithCategory()
+            path = self.tools_folder + "/" + node_type
+            
+            self.create_folders_safe(path)
+            source = self.tools_folder + "/__sample__/sample.py"
+            destination = path + "/sample.py"
+            print(source)
+            print(destination)
+            shutil.copy2(source, destination)
 
+    def create_folders_safe(self, path):
+        """Safely create folders with error handling."""
+        try:
+            os.makedirs(path, exist_ok=True)
+            print(f"✓ Created/verified folder: {path}")
+            return True
+        except PermissionError:
+            print(f"✗ Permission denied: {path}")
+            return False
+        except Exception as e:
+            print(f"✗ Error creating folder {path}: {e}")
+            return False
+
+            
     def load_tools_for_node_type(self, node_type):
+        
         self.clear_tools()
-
+        
         # Path to node type folder
         node_folder = os.path.join(self.tools_folder, node_type)
 
