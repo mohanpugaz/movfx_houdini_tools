@@ -487,15 +487,11 @@ for node in hou.selectedNodes():
   </tool>
 
   <tool name="read_code" label="read_code" icon="hicon:/SVGIcons.index?MISC_python.svg">
-    <script scriptType="python"><![CDATA[codefile ="/users/mohan/tmp/temp.txt" 
+    <script scriptType="python"><![CDATA[codefile ="/users/mohan/tmp/nodes/float_visualizer.txt" 
 with open(codefile, "r") as file:  # Open the file in read mode
     content = file.read()
     file.close()
-
-exec(content)                   #run saved code
-
-
-]]></script>
+exec(content) ]]></script>
   </tool>
 
   <tool name="multi_read" label="multi read" icon="hicon:/SVGIcons.index?MISC_python.svg">
@@ -522,7 +518,7 @@ for f in files:
     <memberToolshelf name="mohan_git"/>
     <memberToolshelf name="movfx"/>
     <memberToolshelf name="movfx_dev"/>
-    <memberToolshelf name="untold_lighting"/>
+    <memberToolshelf name="labs_toolset"/>
   </shelfSet>
 
   <tool name="mantra_to_arnold_lights" label="Mantra To Arnold Lights" icon="hicon:/SVGIcons.index?DATATYPES_lpe_tag_light.svg">
