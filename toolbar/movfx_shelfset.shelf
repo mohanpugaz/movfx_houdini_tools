@@ -11,6 +11,8 @@
     <memberToolshelf name="movfx_jobs"/>
     <memberToolshelf name="movfx_utd"/>
     <memberToolshelf name="hpaste_shelf"/>
+    <memberToolshelf name="crowds"/>
+    <memberToolshelf name="ODTOOLS"/>
   </shelfSet>
 
   <toolshelf name="movfx" label="Movfx">
@@ -33,6 +35,7 @@
     <memberTool name="multi_read"/>
     <memberTool name="telegram_message"/>
     <memberTool name="snap_save_to_dev"/>
+    <memberTool name="edit_mats_lops"/>
   </toolshelf>
 
   <tool name="tool_1" label="New Tool" icon="PLASMA_App">
@@ -479,7 +482,7 @@ mt.make_workspace(path)
 for node in hou.selectedNodes():
     name = node.name()
     strCode = node.asCode(True,True)#get code, skip defaults, recursively
-    codefile =f"/users/mohan/tmp/nodes/{name}.txt" 
+    codefile =f"C:/Users/mohan/Desktop/plam_tree/v2/{name}.txt" 
     
     with open(codefile , "w") as file:  # Open the file in write mode
         file.write(strCode)
@@ -488,7 +491,7 @@ for node in hou.selectedNodes():
   </tool>
 
   <tool name="read_code" label="read_code" icon="hicon:/SVGIcons.index?MISC_python.svg">
-    <script scriptType="python"><![CDATA[codefile ="/users/mohan/tmp/nodes/float_visualizer.txt" 
+    <script scriptType="python"><![CDATA[codefile ="C:/Users/mohan/Desktop/plam_tree/v2/mtlxmaterial.txt" 
 with open(codefile, "r") as file:  # Open the file in read mode
     content = file.read()
     file.close()

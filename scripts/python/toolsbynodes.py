@@ -16,7 +16,7 @@ class SimpleToolsUI(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout(self)
 
         #Tool Info
-        self.tool_label = QtWidgets.QLabel("Tools By Nodes - By MOVFX")
+        self.tool_label = QtWidgets.QLabel("Tools By Nodes________________MOVFX")
         self.tool_label.setStyleSheet("""
             background-color: #9b59b6;
             color: white;
@@ -75,26 +75,46 @@ class SimpleToolsUI(QtWidgets.QWidget):
         self.on_selection_changed()
 
     def on_selection_changed(self):
-        # Get selected nodes
-        
         selected = hou.selectedNodes()
 
-        if len(selected) == 1:
+        # --- No node selected ---
+        if len(selected) == 0:
+            if self.current_node_type is not None:
+                self.current_node_type = None
+                self.node_label.setText("No node selected")
+                self.clear_tools()
+
+        # --- Single node selected ---
+        elif len(selected) == 1:
             node = selected[0]
             node_type = node.type().nameWithCategory()
+            node_type = node_type.replace(":", "_")
 
             # Only update if node type changed
             if node_type != self.current_node_type:
                 self.current_node_type = node_type
                 self.node_label.setText(f"Node: {node.name()} ({node_type})")
                 self.load_tools_for_node_type(node_type)
-        else:
-            # Only update if we had a selection before
-            if self.current_node_type is not None:
-                self.current_node_type = None
-                self.node_label.setText("Select a single node")
-                self.clear_tools()
 
+        # --- Multiple nodes selected ---
+        else:
+            # Collect all node types
+            node_types = {node.type().nameWithCategory().replace(":", "_") for node in selected}
+
+            if len(node_types) == 1:
+                # All nodes are same type
+                node_type = node_types.pop()
+                if node_type != self.current_node_type:
+                    self.current_node_type = node_type
+                    self.node_label.setText(f"{len(selected)} nodes ({node_type}) selected")
+                    self.load_tools_for_node_type(node_type)
+            else:
+                # Different node types
+                if self.current_node_type is not None:
+                    self.current_node_type = None
+                    self.node_label.setText(f"{len(selected)} nodes of different types selected")
+                    self.clear_tools()
+                    
     def open_folder(self):
         tool_path = self.tools_folder
         print(tool_path)
@@ -106,6 +126,8 @@ class SimpleToolsUI(QtWidgets.QWidget):
         if len(selected) == 1:
             node = selected[0]
             node_type = node.type().nameWithCategory()
+            node_type = node_type.replace(":", "_")
+            print(node_type)
             path = self.tools_folder + "/" + node_type
             
             self.create_folders_safe(path)
