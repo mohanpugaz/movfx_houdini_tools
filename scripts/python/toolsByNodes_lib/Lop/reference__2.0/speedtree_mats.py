@@ -156,7 +156,7 @@ def build_materials():
     tree = ET.parse(STMAT)
     root = tree.getroot()
 
-    stage = hou.node("/stage")
+    stage = hou.selectedNodes()[0].parent()
     if stage is None:
         raise RuntimeError("Couldn't find /stage. Run this in Solaris (LOPs) context.")
 
@@ -185,7 +185,9 @@ def build_materials():
         
 
         for map_el in mat.findall("Map"):
+            
             map_name = (map_el.get("Name") or "").strip()
+            print(map_name)
             if not map_name:
                 continue
             channel = map_name.lower()
