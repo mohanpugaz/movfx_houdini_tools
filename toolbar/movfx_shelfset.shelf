@@ -13,6 +13,7 @@
     <memberToolshelf name="hpaste_shelf"/>
     <memberToolshelf name="crowds"/>
     <memberToolshelf name="ODTOOLS"/>
+    <memberToolshelf name="RenderManRIS"/>
   </shelfSet>
 
   <toolshelf name="movfx" label="Movfx">

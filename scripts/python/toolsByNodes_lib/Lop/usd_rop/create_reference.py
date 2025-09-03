@@ -13,6 +13,8 @@ def tool_function():
         ref = node.parent().createNode("reference::2.0")
         ref.moveToGoodPosition()
         ref.parm("filepath1").set(filevalue)
+        ref.setPosition(node.position() + hou.Vector2(2, -1))
+
 
 
 

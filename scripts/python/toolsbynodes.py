@@ -1,4 +1,10 @@
-from PySide2 import QtWidgets, QtCore
+try:
+    from PySide2 import QtWidgets, QtCore
+    print("Using PySide2")
+except ImportError:
+    from PySide6 import QtWidgets, QtCore
+    print("Using PySide6")
+
 import hou
 import os
 import importlib.util
